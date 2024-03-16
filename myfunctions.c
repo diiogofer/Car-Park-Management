@@ -125,5 +125,5 @@ int cleanupParks(Sys *system) {
         free(system->parkPtrArray[i]->name);
         free(system->parkPtrArray[i]);
     }
-    return 0;
+     return 0;
 }
