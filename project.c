@@ -10,7 +10,8 @@ int main(){
         char buffer[MAX_BUFSIZ];
         memset(parkPtrArray, 0, sizeof(parkPtrArray)); /* Pointers to NULL */
 	memset(buffer, '\0', MAX_BUFSIZ);
-        Sys system = sysCreator(buffer, parkPtrArray, 0);
+        Date date = {ZERO, ZERO, ZERO, ZERO, ZERO};
+        Sys system = sysCreator(buffer, parkPtrArray, 0, &date);
         while (1){
                 if (fgets(buffer, MAX_BUFSIZ, stdin) == NULL || 
                         system.buffer[0] == 'q'){
@@ -21,16 +22,16 @@ int main(){
                                 pCommand(&system);
                                 break;
                         case 'e':
-                                printf("e pressed\n");
+                                eCommand(&system);
                                 break;
                         case 's':
                                 printf("s pressed\n");
                                 break;
                         case 'v':
-                                printf("v pressed\n");
+                                printCarsInParks(&system);
                                 break;
                         case 'f':
-                                printf("f pressed\n");
+                                printAllMovements(&system);
                                 break;
                         case 'r':
                                 printf("r pressed\n");
@@ -38,6 +39,6 @@ int main(){
                         }
                         memset(buffer, '\0', MAX_BUFSIZ);
 	}
-        int cleanupParks(Sys *system);
+        cleanupParks(&system);
         return 0;
 }
