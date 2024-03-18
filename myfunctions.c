@@ -256,8 +256,12 @@ void eChanges(Sys *system, Car *car, Movement *mov, Date *date, int parkPos){
     system->currentDate->year = date->year;
     system->currentDate->hour = date->hour;
     system->currentDate->minute = date->minute;
-    /* Decrementing counters in parks*/
-    (system->parkPtrArray[parkPos]->emptySpaces)--;
+    /* Decrementing counters in parks */
+    Park *currentPark = system->parkPtrArray[parkPos];
+    (currentPark->emptySpaces)--;
+
+    /* Printing park information */
+    printf("%s %d\n", currentPark->name, currentPark->emptySpaces);
 }
 
 
@@ -288,13 +292,13 @@ int validMatricula(char *matricula) {
         &letra1, &letra2, &num1, &letra3, &letra4) == 5){
         if (isupper(letra1) && isupper(letra2) && 
             isupper(letra3) && isupper(letra4)
-            && num1 >= 10 && num1 <= 99) {
+            && num1 >= 00 && num1 <= 99) {
                 return 1; // Matrícula válida
         }
     }
     // Verifica o formato "99-XX-99"
     if(sscanf(matricula, "%2d-%c%c-%2d", &num1, &letra1, &letra2, &num2) == 4){
-        if (isupper(letra1) && isupper(letra2) && num2 >= 10 && num2 <= 99) {
+        if (isupper(letra1) && isupper(letra2) && num2 >= 00 && num2 <= 99) {
             return 1; // Matrícula válida
         }
     }
