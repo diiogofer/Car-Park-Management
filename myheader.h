@@ -44,6 +44,7 @@ typedef struct car
     Movement *carMove;
     /* Next */
     struct car *next;
+
 } Car;
 
 typedef struct park
@@ -55,7 +56,9 @@ typedef struct park
     float Z;
     char *name;
     Car *FirstCarOfList;  
+    Car *LastAddedCar;
     Movement *FirstMoveOfList;
+    Movement *LastAddedMovement;
 } Park;
 
 typedef struct sys
@@ -89,4 +92,9 @@ int isValidDate(Date *date);
 int isEarlier(Sys *system, Date *date2);
 int dateChecker(Sys *system, Date *date);
 int searchMatricula(Sys *system, char *matricula);
+
+void sCommand(Sys *system);
+int sErrors(Sys *system, char *inputName, char *matricula);
+void removeCarFromPark(Sys *system, int parkPos, char *matricula, Date *exit);
+
 #endif /* MYHEADER_H */

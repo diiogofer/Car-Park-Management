@@ -25,7 +25,7 @@ int main(){
                                 eCommand(&system);
                                 break;
                         case 's':
-                                printf("s pressed\n");
+                                sCommand(&system);
                                 break;
                         case 'v':
                                 printCarsInParks(&system);
