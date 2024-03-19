@@ -95,6 +95,11 @@ int searchMatricula(Sys *system, char *matricula);
 
 void sCommand(Sys *system);
 int sErrors(Sys *system, char *inputName, char *matricula);
-void removeCarFromPark(Sys *system, int parkPos, char *matricula, Date *exit);
-
+Movement *removeCarFromPark(Sys *system, int parkPos, char *matricula, Date *exit);
+int anoToMinutes(int *DaysMonthVec);
+int percorreAnos(int ComparisonYear, Date *date, int *DaysMonthVec);
+int percorreMeses(Date *date, int *DaysMonthVec);
+int tempoEmMinutosFunc(Date *date, int ComparisonYear,int *DaysMonthVec);
+int datesDiff(Date *date1, Date *date2);
+float payment(Sys *system, int parkPos, Date *entrie, Date *exit);
 #endif /* MYHEADER_H */

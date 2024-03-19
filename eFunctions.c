@@ -296,27 +296,37 @@ int searchMatricula(Sys *system, char *matricula) {
 void sCommand(Sys *system){
     int day, month, year, hour, min;
     char matricula[9], name[MAX_BUFSIZ];
-
-
     if(sscanf(system->buffer, "s \"%[^\"]\" %s %d-%d-%d %d:%d", 
     name, matricula, &day, &month, &year, &hour, &min) == 7 ){
         Date exitDate = {year, month, day, hour, min};
         int parkPos = sErrors(system, name, matricula);
-        removeCarFromPark(system, parkPos, matricula, &exitDate);
-//         printf("%s %d-%d-%d %")
-// <matrícula> <data-entrada> <hora-entrada>
-// <data-saída> <hora-saída> <valor-pago>.
-
+        if(parkPos == -1){return;}
+        Movement *sCarMov = removeCarFromPark(system, parkPos, matricula, &exitDate);
+        if (sCarMov != NULL) {
+            Date *entrie = &sCarMov->entrada; // Obter a data de entrada do movimento removido
+            float paymentValue = payment(system, parkPos, entrie, &exitDate);
+     
+            printf("%s %02d-%02d-%02d %02d:%02d %02d-%02d-%02d %02d:%02d %.2f\n",
+            matricula, entrie->day, entrie->month, entrie->year, entrie->hour, 
+            entrie->minute, day, month, year, hour, min, paymentValue);
+        }
+        else{return;}
     }
-
     else if(sscanf(system->buffer, "s %s %s %d-%d-%d %d:%d", 
     name, matricula, &day, &month, &year, &hour, &min) == 7 ){
         Date exitDate = {year, month, day, hour, min};
         int parkPos = sErrors(system, name, matricula);
-        removeCarFromPark(system, parkPos, matricula, &exitDate);
-
+        if(parkPos == -1){return;}
+        Movement *sCarMov = removeCarFromPark(system, parkPos, matricula, &exitDate);
+        if (sCarMov != NULL) {
+            Date *entrie = &sCarMov->entrada; // Obter a data de entrada do movimento removido
+            float paymentValue = payment(system, parkPos, entrie, &exitDate);
+            printf("%s %02d-%02d-%02d %02d:%02d %02d-%02d-%02d %02d:%02d %.2f\n",
+            matricula, entrie->day, entrie->month, entrie->year, entrie->hour, 
+            entrie->minute, day, month, year, hour, min, paymentValue);
+        }
+        else{return;}
     }
-    else{return;}
 }
 
 int sErrors(Sys *system, char *inputName, char *matricula){
@@ -339,9 +349,10 @@ int sErrors(Sys *system, char *inputName, char *matricula){
 }
 
 
-void removeCarFromPark(Sys *system, int parkPos, char *matricula, Date *exit) {
+Movement *removeCarFromPark(Sys *system, int parkPos, char *matricula, Date *exit) {
     Car *currentCar = system->parkPtrArray[parkPos]->FirstCarOfList;
     Car *prevCar = NULL;
+    Movement *removedMovement = NULL; //ponteiro para o movimento do parque a apagar
     // Procurar o carro com a matrícula especificada na lista de carros
     while (currentCar != NULL && strcmp(currentCar->carMove->matricula, matricula) != 0) {
         prevCar = currentCar;
@@ -370,6 +381,7 @@ void removeCarFromPark(Sys *system, int parkPos, char *matricula, Date *exit) {
                 // Se o carro estiver no meio ou no final da lista
                 prevCar->next = currentCar->next;
             }
+            removedMovement = currentCar->carMove;
             // Liberar a memória do carro removido
             free(currentCar);
             // Atualizar o contador de espaços vazios no parque
@@ -384,60 +396,76 @@ void removeCarFromPark(Sys *system, int parkPos, char *matricula, Date *exit) {
     else {
         printf("%s: invalid vehicle exit.\n", matricula);
     }
+    return removedMovement;
 }
 
 
-// float payment(Sys *system, int parkPos, Date *entrie, Date *Exit){
-//     int tax15Min = system->parkPtrArray[parkPos]->X;
-//     int tax1H = system->parkPtrArray[parkPos]->Y;
-//     int tax1Day = system->parkPtrArray[parkPos]->Z;
+int anoToMinutes(int *DaysMonthVec){
+        int i, minutes = 0;
+        for(i = 0; i < 12; i++){
+                minutes += DaysMonthVec[i] * 1440;
+        }
+        return minutes;
+}
 
+int percorreAnos(int ComparisonYear, Date *date, int *DaysMonthVec){
+    int minutes = 0;
+    if(ComparisonYear == date->year){return minutes;}
 
+    for(;ComparisonYear < date->year; ComparisonYear++){
+        minutes += anoToMinutes(DaysMonthVec);
+    }
+        return minutes;
+}
 
+int percorreMeses(Date *date, int *DaysMonthVec){
+    int i, minutos = 0;
+    for(i = 0; i < date->month - 1; i++){
+        minutos += DaysMonthVec[i] * 24 * 60;
+    }
+    return minutos;
+}
 
+int tempoEmMinutosFunc(Date *date, int ComparisonYear,int *DaysMonthVec){
+    int tempoEmMinutos = 0;
+    tempoEmMinutos = percorreAnos(ComparisonYear, date, DaysMonthVec);
+    tempoEmMinutos += date->hour * 60 + date->minute;
+    tempoEmMinutos += (date->day - 1) * 24 * 60;
+    tempoEmMinutos += percorreMeses(date, DaysMonthVec);
+    return tempoEmMinutos;
+}
 
-// }
+int datesDiff(Date *date1, Date *date2){
+    int tempoEmMinutos1, tempoEmMinutos2;
+    int DaysMonthVec[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    int ComparisonYear = date1->year - 1;
+    tempoEmMinutos1 = tempoEmMinutosFunc(date1, ComparisonYear, DaysMonthVec);
+    tempoEmMinutos2 = tempoEmMinutosFunc(date2, ComparisonYear, DaysMonthVec);
+    return tempoEmMinutos2 - tempoEmMinutos1;
+}
 
-// int datesDiff(Date *date1, Date *date2){
-//     int minutesDate1, minutesDate2, minutesDiff;
+float payment(Sys *system, int parkPos, Date *entrie, Date *exit){
+    float X = system->parkPtrArray[parkPos]->X;
+    float Y = system->parkPtrArray[parkPos]->Y;
+    float Z = system->parkPtrArray[parkPos]->Z;
+    int diffMinutes = datesDiff(entrie, exit);
+    float totalPayment = 0.0;
 
-
-//     return minutesDiff;
-// }
-// int vetornormal[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-// int anoToMinutes(int *vec){
-//         int i, minutes = 0;
-//         for(i = 0; i < 12; i++){
-//                 minutes += vec[i] * 1440;
-//         }
-//         return minutes;
-// }
-
-
-// int percorreanos(int year1, int year2){
-//         int minutes = 0;
-//         if(year1 == year2){return minutes;}
-
-//         for(; year1 < year2; year1++){
-//             minutes += anoToMinutes(vetornormal);
-//         }
-//         return minutes;
-// }
-// int percorremeses(int year, int mesparagem){
-//         int i, minutes = 0;
-//         for(i = 0; i < mesparagem - 1; i++) {
-//             minutes += vetornormal[i] * 24 * 60;
-//         }
-//         return minutes;
-// }
-
-// int tempoEmMinutosFunc( int day, int month, int year, int hour, int minutes){
-//         int tempoEmMinutos = 0;
-//         tempoEmMinutos = percorreanos(2022, year);
-//         tempoEmMinutos += hour * 60 + minutes;
-//         tempoEmMinutos += (day - 1) * 24 * 60;
-//         tempoEmMinutos += percorremeses(year, month);
-
-//         return tempoEmMinutos;
-// }
-
+    int days = diffMinutes / (24*60);
+    int remainingMinutes = diffMinutes % (24*60);
+    float expected15Payment = 0;
+    int counter15min = 0;
+    for(int i = 0; i < remainingMinutes; i+=15){
+        if(counter15min < 4){
+            expected15Payment += X;
+        }
+        else{expected15Payment += Y;}
+        counter15min++;
+    }
+    if(expected15Payment > Z){
+        totalPayment += Z;
+    }
+    else{totalPayment += expected15Payment;}
+    totalPayment += Z * days;
+return totalPayment;
+}
