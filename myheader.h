@@ -5,7 +5,11 @@
 #define MAX_BUFSIZ 8192
 #define MAX_PARKS 20
 #define ZERO 0
-
+/*Abstrações*/
+typedef char* Item;
+#define key(A) (A)
+#define less(A, B) (strcmp(key(A), key(B)) < 0)
+#define exch(A, B) { Item t = A; A = B; B = t; }
 typedef struct date
 {
     int year;
@@ -14,21 +18,7 @@ typedef struct date
     int hour;
     int minute;
 } Date;
-/* primeira ideia para carros :(
-typedef struct car
-{
-    char matricula[9];
-    Date entrada;
-    Date saida;
-    struct car *nextcar;
-} Car;
 
-typedef struct carList{
-    Car *head; 
-    Car *tail;
-} CarList
-*/
-/*segunda ideia para carros*/
 typedef struct movement 
 {
     char matricula[9];
@@ -92,7 +82,7 @@ int isValidDate(Date *date);
 int isEarlier(Sys *system, Date *date2);
 int dateChecker(Sys *system, Date *date);
 int searchMatricula(Sys *system, char *matricula);
-
+/* Exit Functions */
 void sCommand(Sys *system);
 int sErrors(Sys *system, char *inputName, char *matricula);
 Movement *removeCarFromPark(Sys *system, int parkPos, char *matricula, Date *exit);
@@ -102,4 +92,9 @@ int percorreMeses(Date *date, int *DaysMonthVec);
 int tempoEmMinutosFunc(Date *date, int ComparisonYear,int *DaysMonthVec);
 int datesDiff(Date *date1, Date *date2);
 float payment(Sys *system, int parkPos, Date *entrie, Date *exit);
+
+void insertion(Park *a[], int l, int r);
+void printCarMovementsByPlate(Sys *system, Park **parkPtrArray, char *matricula);
+void printCarMovement(const char *parkName, Date *entrada, Date *saida);
+void vCommand(Sys *system);
 #endif /* MYHEADER_H */

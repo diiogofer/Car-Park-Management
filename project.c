@@ -28,15 +28,22 @@ int main(){
                                 sCommand(&system);
                                 break;
                         case 'v':
-                                printCarsInParks(&system);
+                                vCommand(&system);
                                 break;
                         case 'f':
-                                printAllMovements(&system);
+                                printf("r pressed\n");
                                 break;
                         case 'r':
                                 printf("r pressed\n");
                                 break;
-                        }
+                        
+                        case 'y':
+                                printCarsInParks(&system);
+                                break;
+                        case 'z':
+                                printAllMovements(&system);
+                                break;
+                }
                         memset(buffer, '\0', MAX_BUFSIZ);
 	}
         cleanupParks(&system);
