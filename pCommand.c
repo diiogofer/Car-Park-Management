@@ -79,7 +79,7 @@ int pErrors(Sys *system, char *Name, int capacity, float x, float y, float z){
         return ERROR;
     }
     /* invalid cost? (Z > Y > X) */
-    else if (!(x < y && y < z)) {
+    else if (x <= ZERO || y <= ZERO || z <= ZERO || !(x < y && y < z)) {
         printf("invalid cost.\n");
         return ERROR;
     }

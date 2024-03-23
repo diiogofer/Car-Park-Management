@@ -180,7 +180,7 @@ int isValidDate(Date *date) {
 
 int isEarlier(Sys *system, Date *date2) {
 
-    if (system->currentDate->year < date2->year) return 1;
+    if (system->currentDate->year < date2->year) return SUCCESS;
     else if (system->currentDate->year > date2->year) return ERROR;
 
     if (system->currentDate->month < date2->month) return SUCCESS;
@@ -243,3 +243,9 @@ void printAllEntradaDetails(Sys *system) {
         printEntradaDetails(system->parkPtrArray[i]);
     }
 }
+
+
+
+
+/* teste 5 ---->  testa cria parques com nomes grandes e dá os erros normais
+problema está no p   */
