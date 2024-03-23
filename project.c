@@ -35,14 +35,10 @@ int main(){
             case 'f':
                 fCommand(&system);
                 break;
-            /*    
+              
             case 'r':
-                printf("r pressed\n");
-                break; 
-            case 'x':
-                printAllExits(&system);
-                break;    
-            */
+                rCommand(&system);
+                break;     
             case 'y':
                 printCarMatriculas(&system);
                 break;
@@ -50,10 +46,9 @@ int main(){
             case 'z':
                 printMovMatriculas(&system);
                 break;
-            
         }
         memset(buffer, '\0', MAX_BUFSIZ);
 	}
-    /*    cleanup(&system);*/
+    //freeAllParks(&system);
     return 0;
 }

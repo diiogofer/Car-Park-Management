@@ -109,4 +109,10 @@ void fCommand(Sys *system);
 int fErrors(Sys *System, int parkPos, Date *date, char *ParkName);
 void printExitsByPlate(Sys *system, int parkPosition, Date *date);
 void printDailyEarnings(Sys *system, int parkPosition);
+
+void rCommand(Sys *system);
+void organizeParkPtrArray(Sys *system);
+void freeAllParks(Sys *system);
+void freePark(Sys *system, int ParkPos);
+
 #endif /* MYHEADER_H */
