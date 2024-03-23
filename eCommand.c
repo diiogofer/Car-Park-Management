@@ -7,89 +7,87 @@
 void eCommand(Sys *system){
     int day, month, year, hour, min;
     char matricula[9], nome[MAX_BUFSIZ];
-    Car *car;
-    Entrie *entriePtr;
+
     if((sscanf(system->buffer, "e \"%[^\"]\" %s %d-%d-%d %d:%d", 
     nome, matricula, &day, &month, &year, &hour, &min) == 7) ||
     sscanf(system->buffer, "e %s %s %d-%d-%d %d:%d", 
     nome, matricula, &day, &month, &year, &hour, &min) == 7){
-        Date entrie = { year, month, day, hour, min};
-        int parkPos = eErrors(system, nome, matricula, &entrie);
-        if(parkPos != ERROR){
-            car = addCarToPark(system, parkPos);
-            entriePtr = addEntrie(system, matricula, parkPos, &entrie);
-            eChanges(system, car, entriePtr, &entrie, parkPos);
+        Date entry = { year, month, day, hour, min};
+        int parkPos = eErrors(system, nome, matricula, &entry);
+
+        if (parkPos != ERROR) {
+            Park *park = system->parkPtrArray[parkPos];
+            AddMovtoList(park, 'e', matricula, &entry); // Adiciona um movimento de entrada
+            AddCar(park, park->movList.tail); // Associa o carro ao último movimento de entrada
+            updateDate(system, &entry); 
+            printf("%s %d\n", park->name, park->emptySpaces);
         }
     }
     else{return;}
 }
 
-Car *addCarToPark(Sys *system, int parkPos){
-    /* Creating the car */
-    Car *newCar = malloc(sizeof(Car));
-    if (newCar == NULL) {
+void AddMovtoList(Park *park, char identifier, char *license, Date *entryDate) {
+    Mov *newMov = malloc(sizeof(Mov)); // Aloca memória para o novo movimento
+    if (newMov == NULL) {
         printf("Allocation Error.\n");
         exit(0);
-        }
-    newCar->carEntrie = NULL;
+    }
+    newMov->identifier = identifier;
+    newMov->payment = ZERO;
+    strcpy(newMov->license, license);
+    newMov->movDate = *entryDate;
+    newMov->next = NULL;
+
+    // Verifica se a lista de movimentos está vazia
+    if (park->movList.head == NULL) {
+        park->movList.head = newMov;
+        park->movList.tail = newMov;
+    } else {
+        park->movList.tail->next = newMov;
+        park->movList.tail = newMov;
+    }
+}
+
+void AddCar(Park *park, Mov *carEntry) {
+    Car *newCar = malloc(sizeof(Car)); // Aloca memória para o novo carro
+    if (newCar == NULL) {
+        printf("Allocation Error.\n");
+        exit(1);
+    }
+
+    newCar->carEntry = carEntry;
     newCar->next = NULL;
-    /* Adding the car to the park */
-    if(system->parkPtrArray[parkPos]->FirstCar == NULL){
-        system->parkPtrArray[parkPos]->FirstCar = newCar;
-        system->parkPtrArray[parkPos]->LastCar = newCar;
+
+    // Verifica se a lista de carros está vazia
+    if (park->carList.head == NULL) {
+        park->carList.head = newCar;
+        park->carList.tail = newCar;
+    } else {
+        park->carList.tail->next = newCar;
+        park->carList.tail = newCar;
     }
-    else{
-        system->parkPtrArray[parkPos]->LastCar->next = newCar;
-        system->parkPtrArray[parkPos]->LastCar = newCar;
-    }
-    return newCar;
+    park->emptySpaces--;
 }
 
-Entrie *addEntrie(Sys *sys, char *matricula, int parkPos, Date *entrada){
-    if(parkPos != ERROR){
-        Entrie *newEntrie = malloc(sizeof(Entrie));
-        if (newEntrie == NULL) {
-            printf("Allocation Error\n");
-            exit(0);
+void updateDate(Sys *system, Date *entry) {
+    system->currentDate->year = entry->year;
+    system->currentDate->month = entry->month;
+    system->currentDate->day = entry->day;
+    system->currentDate->hour = entry->hour;
+    system->currentDate->minute = entry->minute;
+}
+
+int findParkByName(Sys *system , char *inputName){
+    int iter = ZERO;
+    while(iter < system->createdParks){
+        if(strcmp(system->parkPtrArray[iter]->name, inputName) == ZERO)
+            return iter;
+        else{
+            iter++;
         }
-        strcpy(newEntrie->matricula, matricula);
-        newEntrie->entrada = *entrada;
-        newEntrie->saida = NULL;
-        newEntrie->next = NULL;
-        
-        if (sys->parkPtrArray[parkPos]->FirstEntrie == NULL) {
-            /*Atualiza o ponteiro que aponta para o primeiro parque */
-            sys->parkPtrArray[parkPos]->FirstEntrie = newEntrie;
-            /* O ponteiro que aponta para o ulitmo parque = ao do primeiro */
-            sys->parkPtrArray[parkPos]->LastEntrie = newEntrie;
-        } 
-        else {
-            sys->parkPtrArray[parkPos]->LastEntrie->next = newEntrie;
-            sys->parkPtrArray[parkPos]->LastEntrie = newEntrie;
-        }
-        return newEntrie;
     }
-    return NULL;
+    return ERROR;
 }
-
-
-
-void eChanges(Sys *system, Car *car, Entrie *entrie, Date *date, int parkPos){
-    /* Associate Entrie To Car*/
-    car->carEntrie = entrie;
-    /* Changing system last date */
-    system->currentDate->day = date->day;
-    system->currentDate->month = date->month;
-    system->currentDate->year = date->year;
-    system->currentDate->hour = date->hour;
-    system->currentDate->minute = date->minute;
-    /* Decrementing counters in parks */
-    Park *currentPark = system->parkPtrArray[parkPos];
-    (currentPark->emptySpaces)--;
-    /* Printing park information */
-    printf("%s %d\n", currentPark->name, currentPark->emptySpaces);
-}
-
 
 int eErrors(Sys *system, char *inputName, char *matricula, Date *date){
     /* invalid park name */
@@ -123,18 +121,6 @@ int eErrors(Sys *system, char *inputName, char *matricula, Date *date){
     }
 }
 
-int findParkByName(Sys *system , char *inputName){
-    int iter = ZERO;
-    while(iter < system->createdParks){
-        if(strcmp(system->parkPtrArray[iter]->name, inputName) == ZERO)
-            return iter;
-        else{
-            iter++;
-        }
-    }
-    return ERROR;
-}
-
 int validMatricula(char *matricula){
     int i;
     int charPairCounter = ZERO;
@@ -165,6 +151,20 @@ int validMatricula(char *matricula){
         }
     else{return ERROR;}  
 }
+
+int searchMatricula(Sys *system, char *matricula) {
+    for (int iter = 0; iter < system->createdParks; iter++) {
+        Car *currentCar = system->parkPtrArray[iter]->carList.head;
+        while (currentCar != NULL) {
+            if (strcmp(currentCar->carEntry->license, matricula) == 0) {
+                return ERROR;
+            }
+            currentCar = currentCar->next;
+        }
+    }
+    return SUCCESS;
+}
+
 
 int isValidDate(Date *date) {
     /* Static vector with month days */
@@ -198,54 +198,35 @@ int isEarlier(Sys *system, Date *date2) {
     return SUCCESS;
 }
 
-int searchMatricula(Sys *system, char *matricula) {
-    for (int iter = ZERO; iter < system->createdParks; iter++) {
-        Car *currentCar = system->parkPtrArray[iter]->FirstCar;
+
+void printCarMatriculas(Sys *system) {
+    for (int iter = 0; iter < system->createdParks; iter++) {
+        printf("Park: %s\n", system->parkPtrArray[iter]->name);
+        Car *currentCar = system->parkPtrArray[iter]->carList.head;
         while (currentCar != NULL) {
-            if (strcmp(currentCar->carEntrie->matricula, matricula) == ZERO) {
-                return ERROR;
-            }
+            printf("Matricula: %s\n", currentCar->carEntry->license);
             currentCar = currentCar->next;
         }
-    }
-    return SUCCESS;
-}
-
-void printCarMatriculas(Park *park) {
-    Car *currentCar = park->FirstCar;
-    while (currentCar != NULL) {
-        printf("Matrícula do carro: %s\n", currentCar->carEntrie->matricula);
-        currentCar = currentCar->next;
-    }
-}
-
-void printEntradaDetails(Park *park) {
-    Entrie *currentEntrie = park->FirstEntrie;
-    while (currentEntrie != NULL) {
-        printf("Matrícula: %s, Data de entrada: %d/%d/%d %d:%d\n", 
-               currentEntrie->matricula, 
-               currentEntrie->entrada.day, currentEntrie->entrada.month, currentEntrie->entrada.year,
-               currentEntrie->entrada.hour, currentEntrie->entrada.minute);
-        currentEntrie = currentEntrie->next;
-    }
-}
-
-void printAllCarMatriculas(Sys *system) {
-    for (int i = 0; i < system->createdParks; i++) {
-        printf("Parque %s:\n", system->parkPtrArray[i]->name);
-        printCarMatriculas(system->parkPtrArray[i]);
-    }
-}
-
-void printAllEntradaDetails(Sys *system) {
-    for (int i = 0; i < system->createdParks; i++) {
-        printf("Parque %s:\n", system->parkPtrArray[i]->name);
-        printEntradaDetails(system->parkPtrArray[i]);
+        printf("\n");
     }
 }
 
 
 
-
-/* teste 5 ---->  testa cria parques com nomes grandes e dá os erros normais
-problema está no p   */
+void printMovMatriculas(Sys *system) {
+    for (int iter = 0; iter < system->createdParks; iter++) {
+        printf("Park: %s\n", system->parkPtrArray[iter]->name);
+        Mov *currentMov = system->parkPtrArray[iter]->movList.head;
+        while (currentMov != NULL) {
+            printf("Identifier: %c\n", currentMov->identifier);
+            printf("Matricula: %s\n", currentMov->license);
+            printf("Data: %d-%02d-%02d %02d:%02d\n", 
+                   currentMov->movDate.year, currentMov->movDate.month, 
+                   currentMov->movDate.day, currentMov->movDate.hour, 
+                   currentMov->movDate.minute);
+            printf("Payment: %.2f\n", currentMov->payment); 
+            currentMov = currentMov->next;
+        }
+        printf("\n");
+    }
+}

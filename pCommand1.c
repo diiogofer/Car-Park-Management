@@ -13,7 +13,6 @@ void pCommand(Sys *system){
 	int capacity;
 	float TaxX, TaxY, TaxZ;
 	char parkName[MAX_BUFSIZ];
-	
 	if ((sscanf(system->buffer, "p \"%[^\"]\" %d %f %f %f", 
         parkName, &capacity, &TaxX, &TaxY, &TaxZ) == 5) ||
         (sscanf(system->buffer, "p %s %d %f %f %f", 
@@ -45,15 +44,12 @@ void createPark(Sys *sys, char *Name, int Max, float x, float y, float z){
         newPark->X = x;
         newPark->Y = y;
         newPark->Z = z;
-        /* List pointers to NULL */
-        newPark->FirstCar = NULL;
-        newPark->LastCar = NULL;
-        newPark->FirstEntrie = NULL;
-        newPark->LastEntrie = NULL;
-        newPark->FirstExit = NULL;
-        newPark->LastExit = NULL;
-        sys->parkPtrArray[sys->createdParks++] = newPark;
+        newPark->carList.head = NULL;
+        newPark->carList.tail = NULL;
+        newPark->movList.head = NULL;
+        newPark->movList.tail = NULL;
 
+        sys->parkPtrArray[sys->createdParks++] = newPark;
     }
 }
 void parkInformation(Sys *system) {
@@ -92,5 +88,3 @@ int pErrors(Sys *system, char *Name, int capacity, float x, float y, float z){
         return ZERO;
     }
 }
-
-

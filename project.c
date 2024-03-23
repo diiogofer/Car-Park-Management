@@ -23,12 +23,15 @@ int main(){
             case 'e':
                 eCommand(&system);
                     break;
+            
             case 's':
                 sCommand(&system);
                 break;
+            
             case 'v':
                 vCommand(&system);
                 break;
+            /*
             case 'f':
                 printf("f pressed\n");
                 break;
@@ -38,12 +41,15 @@ int main(){
             case 'x':
                 printAllExits(&system);
                 break;    
+            */
             case 'y':
-                printAllCarMatriculas(&system);
+                printCarMatriculas(&system);
                 break;
+            
             case 'z':
-                printAllEntradaDetails(&system);
+                printMovMatriculas(&system);
                 break;
+            
         }
         memset(buffer, '\0', MAX_BUFSIZ);
 	}

@@ -23,41 +23,40 @@ typedef struct date
     int minute;
 } Date;
 
-typedef struct exit{
-    char matricula[9];
-    Date saida;
-    float Payment;
-    struct exit *next;
-} Exit;
-
-typedef struct entrie 
+typedef struct moviment 
 {
-    char matricula[9];
-    Date entrada;
-    Exit *saida;
-    struct entrie *next;
-} Entrie;
+    char identifier; // pode ser o caracter 's' ou o caracter 'e'
+    char license[9];
+    Date movDate;
+    float payment;
+    struct moviment *next;
+} Mov;
 
 typedef struct car
 {
-    Entrie *carEntrie;
+    Mov *carEntry;
     struct car *next;
 } Car;
 
-typedef struct park
-{
+typedef struct car_node {
+    Car *head; 
+    Car *tail; 
+} CarList;
+
+typedef struct mov_node {
+    Mov *head; 
+    Mov *tail; 
+} MovList;
+
+typedef struct park {
     int maxCapacity;
     int emptySpaces;
     float X;
     float Y;
     float Z;
     char *name;
-    Car *FirstCar;  
-    Car *LastCar;
-    Entrie *FirstEntrie;
-    Entrie *LastEntrie;
-    Exit *FirstExit;
-    Exit *LastExit;
+    CarList carList; 
+    MovList movList; 
 } Park;
 
 typedef struct sys
@@ -69,46 +68,40 @@ typedef struct sys
 } Sys;
 
 /*Function Declarations*/
-Sys sysCreator(char *buf, Park **parksPtr, int createdParks, Date *actualDate);
+Sys sysCreator(char *buf, Park **parksPtr, int createdParks, Date *date);
 void pCommand(Sys *system);
 void createPark(Sys *system, char *Name, int Max, float x, float y, float z);
 void parkInformation(Sys *system);
 int pErrors(Sys *system, char *Name, int capacity, float x, float y, float z);
 
 void eCommand(Sys *system);
-Car *addCarToPark(Sys *system, int parkPos);
-Entrie *addEntrie(Sys *sys, char *matricula, int parkPos, Date *entrada);
-void eChanges(Sys *system, Car *car, Entrie *entrie, Date *date, int parkPos);
-int eErrors(Sys *system, char *inputName, char *matricula, Date *date);
+void AddMovtoList(Park *park, char identifier, char *license, Date *entryDate);
+void AddCar(Park *park, Mov *carEntry);
+void updateDate(Sys *system, Date *newDate);
 int findParkByName(Sys *system , char *inputName);
+int eErrors(Sys *system, char *inputName, char *matricula, Date *date);
 int validMatricula(char *matricula);
+int searchMatricula(Sys *system, char *matricula);
 int isValidDate(Date *date);
 int isEarlier(Sys *system, Date *date2);
-int searchMatricula(Sys *system, char *matricula);
+/* APAGAR MAIS TARDE */
+void printCarMatriculas(Sys *system);
+void printMovMatriculas(Sys *system);
 
-/*Apagar mais tarde*/
-void printCarMatriculas(Park *park);
-void printEntradaDetails(Park *park);
-void printAllCarMatriculas(Sys *system);
-void printAllEntradaDetails(Sys *system);
-
+/**/
 void sCommand(Sys *system);
-int sErrors(Sys *system, char *inputName, char *matricula);
-Exit *addExit(Sys *sys, char *matricula, int parkPos, Date *saida);
-Entrie *removeCar(Sys *system, int parkPos, char *matricula, Date *exit);
+Car *sErrors(Sys *system, int ParkPos, char *name, char *license, Date *exit);
+Mov *removeCar(Sys *system, int parkPosition, Car *carToRemove);
+
 int anoToMinutes(int *DaysMonthVec);
 int percorreAnos(int ComparisonYear, Date *date, int *DaysMonthVec);
 int percorreMeses(Date *date, int *DaysMonthVec);
 int tempoEmMinutosFunc(Date *date, int ComparisonYear,int *DaysMonthVec);
 int datesDiff(Date *date1, Date *date2);
 float payment(Sys *system, int parkPos, Date *entrie, Date *exit);
+Car *findCarInPark(Park *park, char *license);
 
-/* Apagar mais tarde */
-void printAllExits(Sys *system);
-void printExitsInPark(Park *park);
-
-
+void vCommand(Sys *system);
 void insertion(Park *a[], int l, int r);
 void printCarMovByPlate(Sys *system, Park **parkPtrArray, char *matricula);
-void vCommand(Sys *system);
 #endif /* MYHEADER_H */
