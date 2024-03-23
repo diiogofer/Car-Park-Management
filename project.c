@@ -49,6 +49,6 @@ int main(){
         }
         memset(buffer, '\0', MAX_BUFSIZ);
 	}
-    //freeAllParks(&system);
+    freeAllParks(&system);
     return 0;
 }

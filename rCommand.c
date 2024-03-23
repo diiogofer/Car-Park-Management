@@ -30,8 +30,6 @@ void rCommand(Sys *system){
     }
 }
 
-
-
 void organizeParkPtrArray(Sys *system) {
     /* Novo vetor de ponteiros para substituir o antigo */
     Park *newArray[MAX_PARKS];
@@ -56,16 +54,14 @@ void organizeParkPtrArray(Sys *system) {
 
 
 
-// void freeAllParks(Sys *system) {
-//     for (int i = 0; i < system->createdParks; i++) {
-//         Park *park = system->parkPtrArray[i];
-//         if (park != NULL) {
-//             freePark(park, i);
-//             /*evitar acesso acidental*/
-//             system->parkPtrArray[i] = NULL;
-//         }
-//     }
-// }
+void freeAllParks(Sys *system) {
+    for (int i = 0; i < system->createdParks; i++) {
+        Park *park = system->parkPtrArray[i];
+        if (park != NULL) {
+            freePark(system, i);
+        }
+    }
+}
 
 
 void freePark(Sys *system, int parkPos) {
