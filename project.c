@@ -31,10 +31,11 @@ int main(){
             case 'v':
                 vCommand(&system);
                 break;
-            /*
+            
             case 'f':
-                printf("f pressed\n");
+                fCommand(&system);
                 break;
+            /*    
             case 'r':
                 printf("r pressed\n");
                 break; 

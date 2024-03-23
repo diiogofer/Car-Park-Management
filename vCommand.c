@@ -4,12 +4,6 @@
 #include <ctype.h>
 #include <string.h>
 
-#include "myheader.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <string.h>
-
 // Função de ordenação por inserção para strings
 void insertion(Park *a[], int l, int r) {
     int i, j;

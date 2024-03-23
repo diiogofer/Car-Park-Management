@@ -104,4 +104,9 @@ Car *findCarInPark(Park *park, char *license);
 void vCommand(Sys *system);
 void insertion(Park *a[], int l, int r);
 void printCarMovByPlate(Sys *system, Park **parkPtrArray, char *matricula);
+
+void fCommand(Sys *system);
+int fErrors(Sys *System, int parkPos, Date *date, char *ParkName);
+void printExitsByPlate(Sys *system, int parkPosition, Date *date);
+void printDailyEarnings(Sys *system, int parkPosition);
 #endif /* MYHEADER_H */
