@@ -102,7 +102,7 @@ int eErrors(Sys *system, char *inputName, char *matricula, Date *date){
         return ERROR;
     }
     /* Invalid licence plate */
-    else if(validMatricula(matricula) == ERROR){
+    else if(validLicensePlate(matricula) == ERROR){
         printf("%s: invalid licence plate.\n", matricula); 
         return ERROR;
     }
@@ -121,36 +121,35 @@ int eErrors(Sys *system, char *inputName, char *matricula, Date *date){
     }
 }
 
-int validMatricula(char *matricula){
-    int i;
-    int charPairCounter = ZERO;
-    int numberPairCounter = ZERO;
-    int hyphen1Pos = 2, hyphen2Pos = 5; 
-    if(strlen(matricula) != 8){return ERROR;}
-    if(matricula[hyphen1Pos] != '-' || matricula[hyphen2Pos] != '-'){
-        return ERROR;
-    }
-    for(i = ZERO; i <= hyphen2Pos+1; i+=(hyphen1Pos+1)){
-        int j = i;
-        if(isupper(matricula[j])){
-            if(isupper(matricula[j+1]))
-                charPairCounter++;
-            else{ return ERROR;}
+int validLicensePlate(char *license) {
+    int charPairCounter = 0;
+    int numberPairCounter = 0;
+    int hyphen1Pos = 2, hyphen2Pos = 5;
+
+    if (strlen(license) != 8) return ERROR;
+    if (license[hyphen1Pos] != '-' || license[hyphen2Pos] != '-') return ERROR;
+
+    for (int iter = 0; iter < 8; iter += 3) {
+        int j = iter;
+        if (isupper(license[j])) {
+            if (!isupper(license[j + 1])) return ERROR;
+            charPairCounter++;
+        } else if (isdigit(license[j])) {
+            if (!isdigit(license[j + 1])) return ERROR;
+            numberPairCounter++;
+        } else {
+            return ERROR;
         }
-        else if(isdigit(matricula[j])){
-            if(isdigit(matricula[j+1])){
-                numberPairCounter++;
-            }
-            else{return ERROR;}
-        }
-        else{return ERROR;}
     }
-    if((numberPairCounter == 1 && charPairCounter == 2) ||
-        (numberPairCounter == 2 && charPairCounter == 1)){
+
+    if ((numberPairCounter == 1 && charPairCounter == 2) ||
+        (numberPairCounter == 2 && charPairCounter == 1)) {
         return SUCCESS;
-        }
-    else{return ERROR;}  
+    }
+
+    return ERROR;
 }
+
 
 int searchMatricula(Sys *system, char *matricula) {
     for (int iter = 0; iter < system->createdParks; iter++) {
@@ -198,35 +197,3 @@ int isEarlier(Sys *system, Date *date2) {
     return SUCCESS;
 }
 
-
-void printCarMatriculas(Sys *system) {
-    for (int iter = 0; iter < system->createdParks; iter++) {
-        printf("Park: %s\n", system->parkPtrArray[iter]->name);
-        Car *currentCar = system->parkPtrArray[iter]->carList.head;
-        while (currentCar != NULL) {
-            printf("Matricula: %s\n", currentCar->carEntry->license);
-            currentCar = currentCar->next;
-        }
-        printf("\n");
-    }
-}
-
-
-
-void printMovMatriculas(Sys *system) {
-    for (int iter = 0; iter < system->createdParks; iter++) {
-        printf("Park: %s\n", system->parkPtrArray[iter]->name);
-        Mov *currentMov = system->parkPtrArray[iter]->movList.head;
-        while (currentMov != NULL) {
-            printf("Identifier: %c\n", currentMov->identifier);
-            printf("Matricula: %s\n", currentMov->license);
-            printf("Data: %d-%02d-%02d %02d:%02d\n", 
-                   currentMov->movDate.year, currentMov->movDate.month, 
-                   currentMov->movDate.day, currentMov->movDate.hour, 
-                   currentMov->movDate.minute);
-            printf("Payment: %.2f\n", currentMov->payment); 
-            currentMov = currentMov->next;
-        }
-        printf("\n");
-    }
-}

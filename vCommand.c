@@ -55,7 +55,7 @@ void vCommand(Sys *system) {
     
     // Lê a matrícula do buffer
     if (sscanf(system->buffer, "v %s", matricula) == 1 &&
-        validMatricula(matricula) != ERROR){
+        validLicensePlate(matricula) != ERROR){
         // Cria uma cópia ordenada dos ponteiros do vetor original
         Park *tempParkPtrArray[system->createdParks];
         for (int i = 0; i < system->createdParks; i++) {

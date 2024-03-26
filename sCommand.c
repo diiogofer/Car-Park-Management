@@ -57,7 +57,7 @@ Car *sErrors(Sys *system, int ParkPos, char *name, char *license, Date *exit) {
         return NULL;
     }
     /* Invalid licence plate */
-    else if (validMatricula(license) == ERROR) {
+    else if (validLicensePlate(license) == ERROR) {
         printf("%s: invalid licence plate.\n", license); 
         return NULL;
     }

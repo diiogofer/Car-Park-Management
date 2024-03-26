@@ -80,13 +80,10 @@ void AddCar(Park *park, Mov *carEntry);
 void updateDate(Sys *system, Date *newDate);
 int findParkByName(Sys *system , char *inputName);
 int eErrors(Sys *system, char *inputName, char *matricula, Date *date);
-int validMatricula(char *matricula);
+int validLicensePlate(char *license);
 int searchMatricula(Sys *system, char *matricula);
 int isValidDate(Date *date);
 int isEarlier(Sys *system, Date *date2);
-/* APAGAR MAIS TARDE */
-void printCarMatriculas(Sys *system);
-void printMovMatriculas(Sys *system);
 
 /**/
 void sCommand(Sys *system);
