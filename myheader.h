@@ -70,7 +70,7 @@ typedef struct sys
 /*Function Declarations*/
 Sys sysCreator(char *buf, Park **parksPtr, int createdParks, Date *date);
 void pCommand(Sys *system);
-void createPark(Sys *system, char *Name, int Max, float x, float y, float z);
+void addPark(Sys *system, char *Name, int Max, float x, float y, float z);
 void parkInformation(Sys *system);
 int pErrors(Sys *system, char *Name, int capacity, float x, float y, float z);
 
