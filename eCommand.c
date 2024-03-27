@@ -142,9 +142,11 @@ int validLicensePlate(char *license){
     int iter;
     int charPairCounter = ZERO, numberPairCounter = ZERO;
     int hyphen1Pos = 2, hyphen2Pos = 5; 
+    
     /* Check the length and if the hyphens are in the correct positions */
     if(strlen(license) != LICENSELEN) return ERROR;
     if(license[hyphen1Pos] != '-' || license[hyphen2Pos] != '-') return ERROR;
+    
     /* Iterate over the pairs of characters in the license plate */
     for(iter = ZERO; iter <= hyphen2Pos+1; iter += (hyphen1Pos + 1)){
         int pairIter = iter;
@@ -154,6 +156,7 @@ int validLicensePlate(char *license){
                 numberPairCounter++;
         else {return ERROR;}
     }
+    
     /* Check if the number of character and number pairs is correct */
     if((numberPairCounter == 1 && charPairCounter == 2) ||
         (numberPairCounter == 2 && charPairCounter == 1)){

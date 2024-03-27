@@ -8,6 +8,8 @@
 #define ERROR -1
 #define SUCCESS 1
 #define LICENSELEN 8
+#define DAYTOMIN 1440
+#define HOURTOMIN 60
 
 /*Abstrações*/
 typedef char* Item;
@@ -91,10 +93,10 @@ void sCommand(Sys *system);
 Car *sErrors(Sys *system, int ParkPos, char *name, char *license, Date *exit);
 Mov *removeCar(Sys *system, int parkPosition, Car *carToRemove);
 
-int anoToMinutes(int *DaysMonthVec);
-int percorreAnos(int ComparisonYear, Date *date, int *DaysMonthVec);
-int percorreMeses(Date *date, int *DaysMonthVec);
-int tempoEmMinutosFunc(Date *date, int ComparisonYear,int *DaysMonthVec);
+int yearToMinutes(int *DaysMonthVec);
+int traverseYears(int ComparisonYear, Date *date, int *DaysMonthVec);
+int traverseMonths(Date *date, int *DaysMonthVec);
+int timeInMinutesFunc(Date *date, int ComparisonYear,int *DaysMonthVec);
 int datesDiff(Date *date1, Date *date2);
 float payment(Sys *system, int parkPos, Date *entrie, Date *exit);
 Car *findCarInPark(Park *park, char *license);

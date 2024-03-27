@@ -79,10 +79,8 @@ Car *sErrors(Sys *system, int ParkPos, char *name, char *license, Date *exit) {
 Mov *removeCar(Sys *system, int parkPosition, Car *carToRemove) {
     Park *park = system->parkPtrArray[parkPosition];
     Mov *associatedEntry = NULL;
-    if (park->carList.head == NULL) {
-        printf("Segundo a lógica do código, isto nunca deve ser impresso.\n");
-        return NULL;
-    }
+    if (park->carList.head == NULL) return NULL;
+
     // Se o carro a ser removido for o primeiro da lista
     if (park->carList.head == carToRemove) {
         associatedEntry = carToRemove->carEntry;
@@ -104,7 +102,6 @@ Mov *removeCar(Sys *system, int parkPosition, Car *carToRemove) {
         }
         currentCar = currentCar->next;
     }
-    printf("Segundo a lógica do código, isto nunca deve ser impresso.\n");
     return NULL;
 }
 
@@ -112,72 +109,89 @@ Mov *removeCar(Sys *system, int parkPosition, Car *carToRemove) {
 
 
 
-int anoToMinutes(int *DaysMonthVec){
-        int i, minutes = 0;
-        for(i = 0; i < 12; i++){
-                minutes += DaysMonthVec[i] * 1440;
-        }
-        return minutes;
+int yearToMinutes(int *DaysMonthVec){
+    int iter, minutes = ZERO;
+    for(iter = ZERO; iter < 12; iter++){
+        minutes += DaysMonthVec[iter] * DAYTOMIN;
+    }
+    return minutes;
 }
 
-int percorreAnos(int ComparisonYear, Date *date, int *DaysMonthVec){
-    int minutes = 0;
-    if(ComparisonYear == date->year){return minutes;}
+int traverseYears(int ComparisonYear, Date *date, int *DaysMonthVec){
+    int minutes = ZERO;
+    if(ComparisonYear == date->year) return minutes;
 
     for(;ComparisonYear < date->year; ComparisonYear++){
-        minutes += anoToMinutes(DaysMonthVec);
+        /* Accumulate minutes for each year */
+        minutes += yearToMinutes(DaysMonthVec);
     }
-        return minutes;
+
+    return minutes;
 }
 
-int percorreMeses(Date *date, int *DaysMonthVec){
-    int i, minutos = 0;
-    for(i = 0; i < date->month - 1; i++){
-        minutos += DaysMonthVec[i] * 24 * 60;
+int traverseMonths(Date *date, int *DaysMonthVec){
+    int iter, minutes = ZERO;
+    
+    for(iter = ZERO; iter < date->month - 1; iter++){
+        /* Accumulate minutes for each month */
+        minutes += DaysMonthVec[iter] * DAYTOMIN;
     }
-    return minutos;
+    
+    return minutes;
 }
 
-int tempoEmMinutosFunc(Date *date, int ComparisonYear,int *DaysMonthVec){
-    int tempoEmMinutos = 0;
-    tempoEmMinutos = percorreAnos(ComparisonYear, date, DaysMonthVec);
-    tempoEmMinutos += date->hour * 60 + date->minute;
-    tempoEmMinutos += (date->day - 1) * 24 * 60;
-    tempoEmMinutos += percorreMeses(date, DaysMonthVec);
-    return tempoEmMinutos;
+int timeInMinutesFunc(Date *date, int ComparisonYear, int *DaysMonthVec){
+    int timeInMinutes = ZERO;
+    /* Convert years to minutes */
+    timeInMinutes = traverseYears(ComparisonYear, date, DaysMonthVec);
+    /* Add hours and minutes */
+    timeInMinutes += date->hour * HOURTOMIN + date->minute;
+    /* Add days */
+    timeInMinutes += (date->day - 1) * DAYTOMIN;
+    /* Convert months to minutes */
+    timeInMinutes += traverseMonths(date, DaysMonthVec);
+    return timeInMinutes;
 }
 
 int datesDiff(Date *date1, Date *date2){
-    int tempoEmMinutos1, tempoEmMinutos2;
+    int timeInMinutes1, timeInMinutes2;
+    /* Array of days in each month */
     int DaysMonthVec[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    /* Set the comparison year as the year before the first date */
     int ComparisonYear = date1->year - 1;
-    tempoEmMinutos1 = tempoEmMinutosFunc(date1, ComparisonYear, DaysMonthVec);
-    tempoEmMinutos2 = tempoEmMinutosFunc(date2, ComparisonYear, DaysMonthVec);
-    return tempoEmMinutos2 - tempoEmMinutos1;
+    /* Convert dates to minutes */
+    timeInMinutes1 = timeInMinutesFunc(date1, ComparisonYear, DaysMonthVec);
+    timeInMinutes2 = timeInMinutesFunc(date2, ComparisonYear, DaysMonthVec);
+    /* Return the difference in minutes */
+    return timeInMinutes2 - timeInMinutes1;
 }
 
 float payment(Sys *system, int parkPos, Date *entrie, Date *exit){
-    float X = system->parkPtrArray[parkPos]->X;
-    float Y = system->parkPtrArray[parkPos]->Y;
-    float Z = system->parkPtrArray[parkPos]->Z;
+    float TaxX = system->parkPtrArray[parkPos]->X;
+    float TaxY = system->parkPtrArray[parkPos]->Y;
+    float TaxZ = system->parkPtrArray[parkPos]->Z;
     int diffMinutes = datesDiff(entrie, exit);
-    float totalPayment = 0.0;
+    float totalPayment = ZERO;
 
-    int days = diffMinutes / (24*60);
-    int remainingMinutes = diffMinutes % (24*60);
-    float expected15Payment = 0;
-    int counter15min = 0;
-    for(int i = 0; i < remainingMinutes; i+=15){
+    int days = diffMinutes / DAYTOMIN;
+    int remainingMinutes = diffMinutes % (DAYTOMIN);
+    float expected15Payment = ZERO;
+    int counter15min = ZERO;
+    
+    /* Calculate payment for each 15-minute interval */
+    for(int iter = ZERO; iter < remainingMinutes; iter+=15){
         if(counter15min < 4){
-            expected15Payment += X;
+            expected15Payment += TaxX;
         }
-        else{expected15Payment += Y;}
+        else{expected15Payment += TaxY;}
         counter15min++;
     }
-    if(expected15Payment > Z){
-        totalPayment += Z;
+
+    /* Determine the total payment */
+    if(expected15Payment > TaxZ){
+        totalPayment += TaxZ;
     }
     else{totalPayment += expected15Payment;}
-    totalPayment += Z * days;
+    totalPayment += TaxZ * days;
 return totalPayment;
 }
