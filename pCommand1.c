@@ -52,7 +52,7 @@ void addPark(Sys *sys, char *Name, int Max, float TaxX, float TaxY, float TaxZ){
     newPark->carList.tail = NULL;
     newPark->movList.head = NULL;
     newPark->movList.tail = NULL;
-    // Add the new park to the system
+    /* Add the new park to the system */ 
     sys->parkPtrArray[sys->createdParks++] = newPark;
 }
 

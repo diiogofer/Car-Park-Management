@@ -11,9 +11,11 @@ Sys sysCreator(char *buffer, Park **parksPtr, int numParks, Date *actualDate){
 }
 
 void freeAllParks(Sys *system) {
+    /* Iterate through each park in the system */
     for (int i = 0; i < system->createdParks; i++) {
         Park *park = system->parkPtrArray[i];
         if (park != NULL) {
+            /* Free memory for the current park */
             freePark(system, i);
         }
     }
@@ -24,7 +26,7 @@ void freePark(Sys *system, int parkPos) {
     Park *park = system->parkPtrArray[parkPos];
 
     if (park != NULL) {
-        // free da lista de carros
+        /* Free memory for each car in the car list */
         Car *currentCar = park->carList.head;
         while (currentCar != NULL) {
             Car *nextCar = currentCar->next;
@@ -32,7 +34,7 @@ void freePark(Sys *system, int parkPos) {
             currentCar = nextCar;
         }
 
-        // free da lista de movimentos
+        /* Free memory for each movement in the movement list */
         Mov *currentMov = park->movList.head;
         while (currentMov != NULL) {
             Mov *nextMov = currentMov->next;
@@ -40,13 +42,13 @@ void freePark(Sys *system, int parkPos) {
             currentMov = nextMov;
         }
 
-        // Libera o nome do parque
+        /* Free memory for the park's name */
         free(park->name);
 
-        // Libera o próprio parque
+        /* Free memory for the park itself */
         free(park);
 
-        // Define o ponteiro do parque como NULL para evitar acesso acidental
+        /* Set the park pointer to NULL */
         system->parkPtrArray[parkPos] = NULL;
     }
 }

@@ -34,18 +34,18 @@ void organizeParkPtrArray(Sys *system) {
     /* Novo vetor de ponteiros para substituir o antigo */
     Park *newArray[MAX_PARKS];
     int newIndex = ZERO;
-    for (int iter = ZERO; iter < system->createdParks; iter++) {
-        if (system->parkPtrArray[iter] != NULL) {
+    for (int iter = ZERO; iter < system->createdParks; iter++){
+        if (system->parkPtrArray[iter] != NULL){
             newArray[newIndex] = system->parkPtrArray[iter];
             newIndex++;
         }
     }
     // Preenche as posições restantes do novo vetor com NULL
-    for (int iter = newIndex; iter < MAX_PARKS; iter++) {
+    for (int iter = newIndex; iter < MAX_PARKS; iter++){
         newArray[iter] = NULL;
     }
     // Substitui o vetor parkPtrArray pelo novo vetor temporário
-    for (int iter = ZERO; iter < MAX_PARKS; iter++) {
+    for (int iter = ZERO; iter < MAX_PARKS; iter++){
         system->parkPtrArray[iter] = newArray[iter];
     }
 }

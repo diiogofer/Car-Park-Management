@@ -102,7 +102,6 @@ int findParkByName(Sys *system , char *inputName){
             iter++;
         }
     }
-
     return ERROR;
 }
 
@@ -166,11 +165,11 @@ int validLicensePlate(char *license){
 }
 
 
-int searchMatricula(Sys *system, char *matricula) {
-    for (int iter = 0; iter < system->createdParks; iter++) {
+int searchMatricula(Sys *system, char *matricula){
+    for (int iter = 0; iter < system->createdParks; iter++){
         Car *currentCar = system->parkPtrArray[iter]->carList.head;
         while (currentCar != NULL) {
-            if (strcmp(currentCar->carEntry->license, matricula) == 0) {
+            if (strcmp(currentCar->carEntry->license, matricula) == 0){
                 return ERROR;
             }
             currentCar = currentCar->next;
@@ -180,7 +179,7 @@ int searchMatricula(Sys *system, char *matricula) {
 }
 
 
-int isValidDate(Date *date) {
+int isValidDate(Date *date){
     /* Static vector with month days */
     int monthDays[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     int validDate = 1;
