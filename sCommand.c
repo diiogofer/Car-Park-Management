@@ -1,9 +1,20 @@
+/**
+ * @file sCommand.c
+ * @brief Implementation of functions related to the vehicle exit command.
+ * @author Diogo Fernandes - ist1110306
+ */
+
 #include "myheader.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 
+/**
+ * @brief Handles the vehicle exit command.
+ * 
+ * @param system Pointer to the system struct.
+ */
 void sCommand(Sys *system){
     int day, month, year, hour, min;
     char license[9], name[MAX_BUFSIZ];
@@ -35,8 +46,13 @@ void sCommand(Sys *system){
     return ;
 }
 
-
-
+/**
+ * @brief Finds a car in the park based on its license plate.
+ * 
+ * @param park Pointer to the park struct.
+ * @param license License plate of the car to find.
+ * @return Pointer to the car if found, NULL otherwise.
+ */
 Car *findCarInPark(Park *park, char *license) {
     Car *currentCar = park->carList.head;
     
@@ -54,6 +70,16 @@ Car *findCarInPark(Park *park, char *license) {
     return NULL; 
 }
 
+/**
+ * @brief Handles errors related to the vehicle exit command.
+ * 
+ * @param system Pointer to the system struct.
+ * @param ParkPos Index of the park in the system array.
+ * @param name Name of the park.
+ * @param license License plate of the vehicle.
+ * @param exit Pointer to the exit date.
+ * @return Pointer to the car if no errors occurred, NULL otherwise.
+ */
 Car *sErrors(Sys *system, int ParkPos, char *name, char *license, Date *exit){
     Park *park = system->parkPtrArray[ParkPos];
     /* Invalid park name */
@@ -81,6 +107,14 @@ Car *sErrors(Sys *system, int ParkPos, char *name, char *license, Date *exit){
     return CarToRemove;
 }
 
+/**
+ * @brief Removes a car from the park's car list.
+ * 
+ * @param system Pointer to the system struct.
+ * @param parkPosition Index of the park in the system array.
+ * @param carToRemove Pointer to the car to remove.
+ * @return Pointer to the entry movement of the removed car.
+ */
 Mov *removeCar(Sys *system, int parkPosition, Car *carToRemove) {
     Park *park = system->parkPtrArray[parkPosition];
     Mov *associatedEntry = NULL;
@@ -112,6 +146,15 @@ Mov *removeCar(Sys *system, int parkPosition, Car *carToRemove) {
     return NULL;
 }
 
+/**
+ * @brief Calculates the payment for parking based on entry and exit times.
+ * 
+ * @param system Pointer to the system struct.
+ * @param parkPos Index of the park in the system array.
+ * @param entrie Pointer to the entry date.
+ * @param exit Pointer to the exit date.
+ * @return The total payment for parking.
+ */
 float payment(Sys *system, int parkPos, Date *entrie, Date *exit){
     float TaxX = system->parkPtrArray[parkPos]->X;
     float TaxY = system->parkPtrArray[parkPos]->Y;

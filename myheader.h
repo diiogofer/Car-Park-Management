@@ -98,13 +98,13 @@ void updateDate(Sys *system, Date *newDate);
 void freeAllParks(Sys *system);
 void freePark(Sys *system, int ParkPos);
 
-/* COMMAND P RELATED FUNCTIONS - pCommand.c */
+/* COMMAND 'p' RELATED FUNCTIONS - pCommand.c */
 void pCommand(Sys *system);
 void addPark(Sys *system, char *Name, int Max, float x, float y, float z);
 void parkInformation(Sys *system);
 int pErrors(Sys *system, char *Name, int capacity, float x, float y, float z);
 
-/* COMMAND E RELATED FUNCTIONS */
+/* COMMAND 'e' RELATED FUNCTIONS - eCommand.c */
 void eCommand(Sys *system);
 void AddMovtoList(Park *park, char identifier, char *license, Date *entryDate);
 void AddCar(Park *park, Mov *carEntry);
@@ -113,7 +113,7 @@ int eErrors(Sys *system, char *inputName, char *matricula, Date *date);
 int validLicensePlate(char *license);
 int searchMatricula(Sys *system, char *matricula);
 
-/* TIME RELATED FUNCTIONS */
+/* TIME RELATED FUNCTIONS - time.c */
 int isValidDate(Date *date);
 int isEarlier(Sys *system, Date *date2);
 int yearToMinutes(int *DaysMonthVec);
@@ -122,25 +122,25 @@ int traverseMonths(Date *date, int *DaysMonthVec);
 int timeInMinutesFunc(Date *date, int ComparisonYear,int *DaysMonthVec);
 int datesDiff(Date *date1, Date *date2);
 
-/* COMMAND S RELATED FUNCTIONS */
+/* COMMAND 's' RELATED FUNCTIONS - sCommand.c */
 void sCommand(Sys *system);
 Car *sErrors(Sys *system, int ParkPos, char *name, char *license, Date *exit);
 Mov *removeCar(Sys *system, int parkPosition, Car *carToRemove);
 float payment(Sys *system, int parkPos, Date *entrie, Date *exit);
 Car *findCarInPark(Park *park, char *license);
 
-/* COMMAND V RELATED FUNCTIONS */
+/* COMMAND 'v' RELATED FUNCTIONS - vCommand.c */
 void vCommand(Sys *system);
 void insertion(Park *array[], int left, int right);
 void printCarMovByPlate(Sys *system, Park **parkPtrArray, char *license);
 
-/* COMMAND F RELATED FUNCTIONS */
+/* COMMAND 'f' RELATED FUNCTIONS */
 void fCommand(Sys *system);
 int fErrors(Sys *System, int parkPos, Date *date, char *ParkName);
 void printExitsByPlate(Sys *system, int parkPosition, Date *date);
 void printDailyEarnings(Sys *system, int parkPosition);
 
-/* COMMAND R RELATED FUNCTIONS */
+/* COMMAND 'r' RELATED FUNCTIONS */
 void rCommand(Sys *system);
 void organizeParkPtrArray(Sys *system);
 

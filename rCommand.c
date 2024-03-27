@@ -1,9 +1,20 @@
+/**
+ * @file rCommand.c
+ * @brief Implementation of functions related to the "r" command.
+ * @author Diogo Fernandes - ist1110306
+ */
+
 #include "myheader.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 
+/**
+ * @brief Executes the "r" command to remove a parking.
+ * 
+ * @param system Pointer to the system structure.
+ */
 void rCommand(Sys *system){
     char name[MAX_BUFSIZ];
     if(sscanf(system->buffer, "r \"%[^\"]\"", name) == 1 ||
@@ -31,6 +42,11 @@ void rCommand(Sys *system){
     }
 }
 
+/**
+ * @brief Organizes the park pointer array by removing NULL pointers.
+ * 
+ * @param system Pointer to the system structure.
+ */
 void organizeParkPtrArray(Sys *system) {
     /* New pointer array to replace the old one */
     Park *newArray[MAX_PARKS];

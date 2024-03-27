@@ -1,9 +1,20 @@
+/**
+ * @file fCommand.c
+ * @brief Implementation of functions related to the "f" command.
+ * @author Diogo Fernandes - ist1110306
+ */
+
 #include "myheader.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 
+/**
+ * @brief Executes the "f" command to display exits by plate or daily earnings.
+ * 
+ * @param system Pointer to the system structure.
+ */
 void fCommand(Sys *system){
     int day, month, year;
     char name[BUFSIZ];
@@ -32,6 +43,15 @@ void fCommand(Sys *system){
     }
 }
 
+/**
+ * @brief Handles error conditions for the "f" command.
+ * 
+ * @param system Pointer to the system structure.
+ * @param parkPos Position of the park in the system array.
+ * @param date Pointer to the target date.
+ * @param ParkName Name of the park.
+ * @return SUCCESS if no errors are found, ERROR otherwise.
+ */
 int fErrors(Sys *system, int parkPos, Date *date, char *ParkName){
     /* Check if the park position is valid */
     if(parkPos == ERROR){
@@ -47,6 +67,13 @@ int fErrors(Sys *system, int parkPos, Date *date, char *ParkName){
     return SUCCESS;
 }
 
+/**
+ * @brief Prints exits by plate for a given park and date.
+ * 
+ * @param system Pointer to the system structure.
+ * @param parkPosition Position of the park in the system array.
+ * @param date Pointer to the target date.
+ */
 void printExitsByPlate(Sys *system, int parkPosition, Date *date){
     Park *park = system->parkPtrArray[parkPosition];
     Mov *currentMov = park->movList.head;
@@ -67,6 +94,13 @@ void printExitsByPlate(Sys *system, int parkPosition, Date *date){
         currentMov = currentMov->next;
     }
 }
+
+/**
+ * @brief Prints daily earnings for a given park.
+ * 
+ * @param system Pointer to the system structure.
+ * @param parkPosition Position of the park in the system array.
+ */
 
 void printDailyEarnings(Sys *system, int parkPosition){
     Park *park = system->parkPtrArray[parkPosition];

@@ -1,9 +1,46 @@
+/**
+ * @file vCommand.c
+ * @brief Implementation of functions related to the "v" command.
+ * @author Diogo Fernandes - ist1110306
+ */
 #include "myheader.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 
+/**
+ * @brief Executes the "v" command to view movements of a car.
+ * 
+ * @param system Pointer to the system structure.
+ */
+void vCommand(Sys *system) {
+    char matricula[9];
+    
+    /* Read the license plate from the buffer */
+    if (sscanf(system->buffer, "v %s", matricula) == 1 &&
+        validLicensePlate(matricula) != ERROR){
+        /* Create a sorted copy of the park pointer array */
+        Park *tempParkPtrArray[system->createdParks];
+        for (int i = 0; i < system->createdParks; i++) {
+            tempParkPtrArray[i] = system->parkPtrArray[i];
+        }
+        insertion(tempParkPtrArray, ZERO, system->createdParks - 1);
+
+        /* Print the movements of the car sorted alphabetically by park names */
+        printCarMovByPlate(system, tempParkPtrArray, matricula);
+    }
+    /* Invalid license plate, print error message */
+    else{printf("%s: invalid licence plate.\n", matricula);}
+}
+
+/**
+ * @brief Sorts the array of park pointers using insertion sort algorithm.
+ * 
+ * @param array Array of park pointers to be sorted.
+ * @param left Left index of the array.
+ * @param right Right index of the array.
+ */
 void insertion(Park *array[], int left, int right) {
     int currentI, prevI;
     /* Iterate through the array */
@@ -20,6 +57,14 @@ void insertion(Park *array[], int left, int right) {
         array[prevI + 1] = current;
     }
 }
+
+/**
+ * @brief Prints the movements of a car sorted by park names.
+ * 
+ * @param system Pointer to the system structure.
+ * @param parkPtrArray Array of park pointers.
+ * @param license License plate of the car.
+ */
 void printCarMovByPlate(Sys *system, Park **parkPtrArray, char *license){
     int totalEntriesCounter = ZERO;
     for (int iter = ZERO; iter < system->createdParks; iter++){
@@ -51,22 +96,3 @@ void printCarMovByPlate(Sys *system, Park **parkPtrArray, char *license){
     }
 }
 
-void vCommand(Sys *system) {
-    char matricula[9];
-    
-    /* Read the license plate from the buffer */
-    if (sscanf(system->buffer, "v %s", matricula) == 1 &&
-        validLicensePlate(matricula) != ERROR){
-        /* Create a sorted copy of the park pointer array */
-        Park *tempParkPtrArray[system->createdParks];
-        for (int i = 0; i < system->createdParks; i++) {
-            tempParkPtrArray[i] = system->parkPtrArray[i];
-        }
-        insertion(tempParkPtrArray, ZERO, system->createdParks - 1);
-
-        /* Print the movements of the car sorted alphabetically by park names */
-        printCarMovByPlate(system, tempParkPtrArray, matricula);
-    }
-    /* Invalid license plate, print error message */
-    else{printf("%s: invalid licence plate.\n", matricula);}
-}

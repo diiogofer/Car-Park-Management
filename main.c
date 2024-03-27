@@ -1,9 +1,25 @@
+/**
+ * @file main.c
+ * @brief Contains the main function of the program.
+ * @author Diogo Fernandes - ist1110306
+ */
+
 #include "myheader.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 
+/**
+ * @brief The main function of the program.
+ * 
+ * This function initializes the system and processes user commands until 
+ * the program is terminated. User commands are read from the standard 
+ * input (stdin) and routed to the appropriate functions based on the 
+ * command type.
+ * 
+ * @return Returns 0 upon successful execution.
+ */
 int main(){
     /* Array of park pointers */
     Park *parkPtrArray[MAX_PARKS];
