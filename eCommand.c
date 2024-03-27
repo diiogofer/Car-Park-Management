@@ -16,18 +16,18 @@
  */
 void eCommand(Sys *system){
     int day, month, year, hour, min;
-    char matricula[9], nome[MAX_BUFSIZ];
+    char matricula[9], name[MAX_BUFSIZ];
 
     /* Parse input to extract vehicle information */
     if((sscanf(system->buffer, "e \"%[^\"]\" %s %d-%d-%d %d:%d", 
-    nome, matricula, &day, &month, &year, &hour, &min) == 7) ||
+    name, matricula, &day, &month, &year, &hour, &min) == 7) ||
     sscanf(system->buffer, "e %s %s %d-%d-%d %d:%d", 
-    nome, matricula, &day, &month, &year, &hour, &min) == 7){
-        Date entry = { year, month, day, hour, min};
+    name, matricula, &day, &month, &year, &hour, &min) == 7){
+        Date entry = {year, month, day, hour, min};
         
         /* Check for errors in the entrance operation */
-        int parkPos = eErrors(system, nome, matricula, &entry);
-        if (parkPos != ERROR) {
+        int parkPos = eErrors(system, name, matricula, &entry);
+        if (parkPos != ERROR){
             Park *park = system->parkPtrArray[parkPos];
             
             /* Add an entrance movement to the park's movement list */
@@ -182,9 +182,7 @@ int eErrors(Sys *system, char *inputName, char *license, Date *date){
 /**
  * @brief Validates a vehicle's license plate format.
  * 
- * Checks if the license plate follows the correct format:
- * three pairs of letters separated by hyphens, followed by
- * three pairs of numbers.
+ * Checks if the license plate follows the correct format.
  * 
  * @param license Pointer to the license plate string.
  * @return SUCCESS if valid, ERROR otherwise.

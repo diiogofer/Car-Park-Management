@@ -33,12 +33,12 @@ typedef struct date {
 /**
  * @brief Represents a movement, either entry or exit, in a parking system.
  */
-typedef struct moviment {
+typedef struct movement {
     char identifier; /**< The identifier, either 's' (exit) or 'e' (entry). */
     char license[9]; /**< The license plate of the vehicle. */
     Date movDate;    /**< The date and time of the movement. */
     float payment;   /**< The payment made for the movement. */
-    struct moviment *next; /**< Pointer to the next movement. */
+    struct movement *next; /**< Pointer to the next movement. */
 } Mov;
 
 /**
@@ -71,9 +71,9 @@ typedef struct mov_node {
 typedef struct park {
     int maxCapacity;   /**< The maximum capacity of the parking lot. */
     int emptySpaces;   /**< The number of empty spaces in the parking lot. */
-    float X;           /**< The X-coordinate of the parking lot. */
-    float Y;           /**< The Y-coordinate of the parking lot. */
-    float Z;           /**< The Z-coordinate of the parking lot. */
+    float X;           /**< Price per 15 minutes within the first hour. */
+    float Y;           /**< Price per 15 minutes after the first hour. */
+    float Z;           /**< Maximum daily price (24 hours). */
     char *name;        /**< The name of the parking lot. */
     CarList carList;   /**< The list of cars in the parking lot. */
     MovList movList;   /**< The list of movements in the parking lot. */
@@ -90,7 +90,7 @@ typedef struct sys {
 } Sys;
 
 
-/*Function Declarations*/
+/* Function Prototypes */
 
 /* SYSTEM RELATED FUNCTIONS - system.c */
 Sys sysCreator(char *buf, Park **parksPtr, int createdParks, Date *date);
@@ -134,13 +134,13 @@ void vCommand(Sys *system);
 void insertion(Park *array[], int left, int right);
 void printCarMovByPlate(Sys *system, Park **parkPtrArray, char *license);
 
-/* COMMAND 'f' RELATED FUNCTIONS */
+/* COMMAND 'f' RELATED FUNCTIONS - fCommand.c */
 void fCommand(Sys *system);
 int fErrors(Sys *System, int parkPos, Date *date, char *ParkName);
 void printExitsByPlate(Sys *system, int parkPosition, Date *date);
 void printDailyEarnings(Sys *system, int parkPosition);
 
-/* COMMAND 'r' RELATED FUNCTIONS */
+/* COMMAND 'r' RELATED FUNCTIONS - rCommand.c */
 void rCommand(Sys *system);
 void organizeParkPtrArray(Sys *system);
 

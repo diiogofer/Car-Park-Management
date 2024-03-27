@@ -29,7 +29,8 @@ int isValidDate(Date *date){
 }
 
 /**
- * @brief Compares two dates to determine if the first date is earlier than the second.
+ * @brief Compares two dates to determine if the first date is earlier 
+ * than the second.
  * 
  * @param system Pointer to the parking system.
  * @param date2 Pointer to the second date structure.
@@ -70,7 +71,8 @@ int yearToMinutes(int *DaysMonthVec){
 }
 
 /**
- * @brief Traverses the years between two dates and calculates the total minutes.
+ * @brief Traverses the years between two dates and calculates 
+ * the total minutes.
  * 
  * @param ComparisonYear The year to start the comparison from.
  * @param date Pointer to the target date.

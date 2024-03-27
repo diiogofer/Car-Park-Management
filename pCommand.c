@@ -48,9 +48,9 @@ void pCommand(Sys *system){
  * @param sys Pointer to the system struct.
  * @param Name Name of the park.
  * @param Max Maximum capacity of the park.
- * @param TaxX Cost parameter for X.
- * @param TaxY Cost parameter for Y.
- * @param TaxZ Cost parameter for Z.
+ * @param TaxX Price per 15 minutes within the first hour.
+ * @param TaxY Price per 15 minutes after the first hour.
+ * @param TaxZ Maximum daily price (24 hours).
  */
 void addPark(Sys *sys, char *Name, int Max, float TaxX, float TaxY, float TaxZ){
     /* Check for errors in park creation */
@@ -86,7 +86,8 @@ void addPark(Sys *sys, char *Name, int Max, float TaxX, float TaxY, float TaxZ){
 /**
  * @brief Displays information about all parks in the system.
  * 
- * Iterates through each park in the system and prints its name, maximum capacity, and empty spaces.
+ * Iterates through each park in the system and prints its name, maximum 
+ * capacity, and empty spaces.
  * 
  * @param system Pointer to the system struct.
  */

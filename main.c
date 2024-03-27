@@ -23,13 +23,13 @@
 int main(){
     /* Array of park pointers */
     Park *parkPtrArray[MAX_PARKS];
-    memset(parkPtrArray, 0, sizeof(parkPtrArray));
+    memset(parkPtrArray, ZERO, sizeof(parkPtrArray));
     /* Buffer for user commands */
     char buff[MAX_BUFSIZ];
 	memset(buff, '\0', MAX_BUFSIZ);
     /* Initializing system with default date */
     Date date = {ZERO, ZERO, ZERO, ZERO, ZERO};
-    Sys system = sysCreator(buff, parkPtrArray, 0, &date);
+    Sys system = sysCreator(buff, parkPtrArray, ZERO, &date);
 
     /* Processing user commands */
     while (1){
