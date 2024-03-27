@@ -126,7 +126,7 @@ int datesDiff(Date *date1, Date *date2);
 void sCommand(Sys *system);
 Car *sErrors(Sys *system, int ParkPos, char *name, char *license, Date *exit);
 Mov *removeCar(Sys *system, int parkPosition, Car *carToRemove);
-float payment(Sys *system, int parkPos, Date *entrie, Date *exit);
+float payment(Sys *system, int parkPos, Date *entry, Date *exit);
 Car *findCarInPark(Park *park, char *license);
 
 /* COMMAND 'v' RELATED FUNCTIONS - vCommand.c */

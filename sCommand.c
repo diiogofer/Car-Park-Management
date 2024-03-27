@@ -28,8 +28,8 @@ void sCommand(Sys *system){
         Car *carToRemove = sErrors(system, parkPos, name, license, &exitDate);
         if(carToRemove == NULL) return;
         /* Removing car from the park */
-        Mov *associatedEntrie = removeCar(system, parkPos, carToRemove);
-        Date entryDate = associatedEntrie->movDate;
+        Mov *associatedEntry = removeCar(system, parkPos, carToRemove);
+        Date entryDate = associatedEntry->movDate;
         Park *park= system->parkPtrArray[parkPos]; 
         AddMovtoList(park, 's', license, &exitDate);
         /* Calculating the payment */
@@ -151,15 +151,15 @@ Mov *removeCar(Sys *system, int parkPosition, Car *carToRemove) {
  * 
  * @param system Pointer to the system struct.
  * @param parkPos Index of the park in the system array.
- * @param entrie Pointer to the entry date.
+ * @param entry Pointer to the entry date.
  * @param exit Pointer to the exit date.
  * @return The total payment for parking.
  */
-float payment(Sys *system, int parkPos, Date *entrie, Date *exit){
+float payment(Sys *system, int parkPos, Date *entry, Date *exit){
     float TaxX = system->parkPtrArray[parkPos]->X;
     float TaxY = system->parkPtrArray[parkPos]->Y;
     float TaxZ = system->parkPtrArray[parkPos]->Z;
-    int diffMinutes = datesDiff(entrie, exit);
+    int diffMinutes = datesDiff(entry, exit);
     float totalPayment = ZERO;
 
     int days = diffMinutes / DAYTOMIN;
