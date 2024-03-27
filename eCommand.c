@@ -138,36 +138,36 @@ int eErrors(Sys *system, char *inputName, char *license, Date *date){
     }
 }
 
-int validLicensePlate(char *license) {
-    int charPairCounter = 0, numberPairCounter = 0;
-    int hyphen1Pos = 2, hyphen2Pos = 5;
-    int licenseLen = 8;
-    /* correct length? */
-    if ((int)strlen(license) != licenseLen) return ERROR;
-    
-    /* hyphens in the correct positions? */
-    if (license[hyphen1Pos] != '-' || license[hyphen2Pos] != '-') return ERROR;
-
-    /* Iterate over the license plate */
-    for (int iter = ZERO; iter < licenseLen; iter += (hyphen1Pos + 1)){
-        int pairIter = iter;
-        if (isupper(license[pairIter])){
-            if (!isupper(license[pairIter + 1])) return ERROR;
-            charPairCounter++;
-        } 
-        else if (isdigit(license[pairIter])){
-            if (!isdigit(license[pairIter + 1])) return ERROR;
-            numberPairCounter++;
-        }
+int validLicensePlate(char *matricula){
+    int i;
+    int charPairCounter = ZERO;
+    int numberPairCounter = ZERO;
+    int hyphen1Pos = 2, hyphen2Pos = 5; 
+    if(strlen(matricula) != 8){return ERROR;}
+    if(matricula[hyphen1Pos] != '-' || matricula[hyphen2Pos] != '-'){
         return ERROR;
     }
-
+    for(i = ZERO; i <= hyphen2Pos+1; i+=(hyphen1Pos+1)){
+        int j = i;
+        if(isupper(matricula[j])){
+            if(isupper(matricula[j+1]))
+                charPairCounter++;
+            else{ return ERROR;}
+        }
+        else if(isdigit(matricula[j])){
+            if(isdigit(matricula[j+1])){
+                numberPairCounter++;
+            }
+            else{return ERROR;}
+        }
+        else{return ERROR;}
+    }
     /* correct number of character and number pairs? */
     if((numberPairCounter == 1 && charPairCounter == 2) ||
         (numberPairCounter == 2 && charPairCounter == 1)){
         return SUCCESS;
     }
-    return ERROR;
+    else{return ERROR;}
 }
 
 
