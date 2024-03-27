@@ -143,7 +143,7 @@ int validLicensePlate(char *license) {
     int hyphen1Pos = 2, hyphen2Pos = 5;
     int licenseLen = 8;
     /* correct length? */
-    if (strlen(license) != licenseLen) return ERROR;
+    if ((int)strlen(license) != licenseLen) return ERROR;
     
     /* hyphens in the correct positions? */
     if (license[hyphen1Pos] != '-' || license[hyphen2Pos] != '-') return ERROR;
