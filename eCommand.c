@@ -83,13 +83,6 @@ void AddCar(Park *park, Mov *carEntry) {
     park->emptySpaces--;
 }
 
-void updateDate(Sys *system, Date *entry) {
-    system->currentDate->year = entry->year;
-    system->currentDate->month = entry->month;
-    system->currentDate->day = entry->day;
-    system->currentDate->hour = entry->hour;
-    system->currentDate->minute = entry->minute;
-}
 
 int findParkByName(Sys *system , char *inputName){
     int iter = ZERO;
