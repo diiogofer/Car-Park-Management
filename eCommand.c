@@ -48,9 +48,11 @@ void eCommand(Sys *system){
  * @brief Adds a new movement to the movement list of a park.
  * 
  * @param park Pointer to the park structure.
- * @param identifier Character indicating the type of movement ('e' for entrance, 's' for exit).
+ * @param identifier Character indicating the type of movement 
+ * ('e' for entrance, 's' for exit).
  * @param license Pointer to a string containing the license plate.
- * @param entryDate Pointer to the date structure representing the entry date and time.
+ * @param entryDate Pointer to the date structure representing 
+ * the entry date and time.
  */
 void AddMovtoList(Park *park, char identifier, char *license, Date *entryDate){
     /* Allocate memory for the new movement */
@@ -142,7 +144,8 @@ int findParkByName(Sys *system , char *inputName){
  * @param inputName Pointer to the park's name.
  * @param license Pointer to the vehicle's license plate.
  * @param date Pointer to the date of entrance.
- * @return The index of the park in the system if successful, or ERROR if any error occurs.
+ * @return The index of the park in the system if successful, or ERROR if any 
+ * error occurs.
  */
 int eErrors(Sys *system, char *inputName, char *license, Date *date){
     /* Check if the specified parking exists */
@@ -214,7 +217,8 @@ int validLicensePlate(char *license){
 }
 
 /**
- * @brief Searches for a vehicle with a given license plate in the parking system.
+ * @brief Searches for a vehicle with a given license plate 
+ * in the parking system.
  * 
  * @param system Pointer to the parking system.
  * @param matricula Pointer to the license plate string to search for.
