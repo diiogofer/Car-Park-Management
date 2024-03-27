@@ -7,19 +7,23 @@
 void fCommand(Sys *system){
     int day, month, year;
     char name[BUFSIZ];
-
+    /* Check if the input format includes a date */
     if((sscanf(system->buffer, "f \"%[^\"]\" %d-%d-%d", 
         name, &day, &month, &year) == 4) || 
         (sscanf(system->buffer, "f %s %d-%d-%d", 
         name, &day, &month, &year) == 4)){
+
+            /* Check for errors and print exits by license plate */
             int parkPos = findParkByName(system, name);
             Date date = {year, month, day, ZERO, ZERO};
             if(fErrors(system, parkPos, &date, name) != ERROR){
                 printExitsByPlate(system, parkPos, &date);
             }
         }
+    /* Check if the input format includes only a name */
     else if((sscanf(system->buffer, "f \"%[^\"]\"", name) == 1) 
         || (sscanf(system->buffer, "f %s", name) == 1)){
+        /* Check for errors and then print daily earnings */
         int parkPos = findParkByName(system, name);
         Date date = {ZERO, ZERO, ZERO, ZERO, ZERO};
         if(fErrors(system, parkPos, &date, name) != ERROR){
@@ -43,7 +47,7 @@ int fErrors(Sys *system, int parkPos, Date *date, char *ParkName){
     return SUCCESS;
 }
 
-void printExitsByPlate(Sys *system, int parkPosition, Date *date) {
+void printExitsByPlate(Sys *system, int parkPosition, Date *date){
     Park *park = system->parkPtrArray[parkPosition];
     Mov *currentMov = park->movList.head;
 
@@ -64,27 +68,24 @@ void printExitsByPlate(Sys *system, int parkPosition, Date *date) {
     }
 }
 
-void printDailyEarnings(Sys *system, int parkPosition) {
+void printDailyEarnings(Sys *system, int parkPosition){
     Park *park = system->parkPtrArray[parkPosition];
     Mov *currentMov = park->movList.head;
-    if (currentMov == NULL) {
-        return;
-    }
-    int prevDay = -1, prevMonth = -1, prevYear = -1;
-    float dailyTotal = 0;
+    if (currentMov == NULL) return;
+    int prevDay = ERROR, prevMonth = ERROR, prevYear = ERROR;
+    float dayTotal = ZERO;
     while (currentMov != NULL) {
-        if (currentMov->identifier == 's') { // Apenas movimentos de saída
-            if (currentMov->movDate.day == prevDay && 
+        if (currentMov->identifier == 's') { /* movement is an exit */
+            if(currentMov->movDate.day == prevDay && 
                 currentMov->movDate.month == prevMonth && 
-                currentMov->movDate.year == prevYear) {
-                dailyTotal += currentMov->payment;
-            } 
-            else {
-                if (prevDay != -1) { // Ignorar a primeira entrada
+                currentMov->movDate.year == prevYear){
+                dayTotal += currentMov->payment;
+            } else {
+                if (prevDay != ERROR) { 
                     printf("%02d-%02d-%02d %.2f\n", 
-                    prevDay, prevMonth, prevYear, dailyTotal);
-                }
-                dailyTotal = currentMov->payment;
+                    prevDay, prevMonth, prevYear, dayTotal);
+                } /* Reset the daily total and update the previous date */
+                dayTotal = currentMov->payment;
                 prevDay = currentMov->movDate.day;
                 prevMonth = currentMov->movDate.month;
                 prevYear = currentMov->movDate.year;
@@ -92,8 +93,8 @@ void printDailyEarnings(Sys *system, int parkPosition) {
         }
         currentMov = currentMov->next;
     }
-    if (prevDay != -1) {
-        printf("%02d-%02d-%02d %.2f\n", prevDay, prevMonth, prevYear, dailyTotal);
+    if (prevDay != ERROR){ /* Print the final daily earnings */
+        printf("%02d-%02d-%02d %.2f\n", prevDay, prevMonth, prevYear, dayTotal);
     }
 }
 
