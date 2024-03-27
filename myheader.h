@@ -1,4 +1,9 @@
-/* iaed24 - ist1110306 - project */
+/**
+ * @file MYHEADER_H
+ * @brief Header file containing data structures and function prototypes.
+ * Author: Diogo Fernandes - ist1110306
+ */
+
 #ifndef MYHEADER_H
 #define MYHEADER_H
 
@@ -11,64 +16,79 @@
 #define DAYTOMIN 1440
 #define HOURTOMIN 60
 
-/*Abstrações*/
-typedef char* Item;
-#define key(A) (A)
-#define less(A, B) (strcmp(key(A), key(B)) < 0)
-#define exch(A, B) { Item t = A; A = B; B = t; }
 
-typedef struct date
-{
-    int year;
-    int month;
-    int day;
-    int hour;
-    int minute;
+/* Data Structures */
+
+/**
+ * @brief Represents a date with year, month, day, hour, and minute.
+ */
+typedef struct date {
+    int year;    /**< The year. */
+    int month;   /**< The month. */
+    int day;     /**< The day. */
+    int hour;    /**< The hour. */
+    int minute;  /**< The minute. */
 } Date;
 
-typedef struct moviment 
-{
-    char identifier; // pode ser o caracter 's' ou o caracter 'e'
-    char license[9];
-    Date movDate;
-    float payment;
-    struct moviment *next;
+/**
+ * @brief Represents a movement, either entry or exit, in a parking system.
+ */
+typedef struct moviment {
+    char identifier; /**< The identifier, either 's' (exit) or 'e' (entry). */
+    char license[9]; /**< The license plate of the vehicle. */
+    Date movDate;    /**< The date and time of the movement. */
+    float payment;   /**< The payment made for the movement. */
+    struct moviment *next; /**< Pointer to the next movement. */
 } Mov;
 
-typedef struct car
-{
-    Mov *carEntry;
-    struct car *next;
+/**
+ * @brief Represents a car in the parking system.
+ */
+typedef struct car {
+    Mov *carEntry;    /**< Pointer to the movement associated with the car. */
+    struct car *next; /**< Pointer to the next car. */
 } Car;
 
+/**
+ * @brief Represents a list of cars.
+ */
 typedef struct car_node {
-    Car *head; 
-    Car *tail; 
+    Car *head; /**< Pointer to the first car in the list. */
+    Car *tail; /**< Pointer to the last car in the list. */
 } CarList;
 
+/**
+ * @brief Represents a list of movements.
+ */
 typedef struct mov_node {
-    Mov *head; 
-    Mov *tail; 
+    Mov *head; /**< Pointer to the first movement in the list. */
+    Mov *tail; /**< Pointer to the last movement in the list. */
 } MovList;
 
+/**
+ * @brief Represents a parking lot.
+ */
 typedef struct park {
-    int maxCapacity;
-    int emptySpaces;
-    float X;
-    float Y;
-    float Z;
-    char *name;
-    CarList carList; 
-    MovList movList; 
+    int maxCapacity;   /**< The maximum capacity of the parking lot. */
+    int emptySpaces;   /**< The number of empty spaces in the parking lot. */
+    float X;           /**< The X-coordinate of the parking lot. */
+    float Y;           /**< The Y-coordinate of the parking lot. */
+    float Z;           /**< The Z-coordinate of the parking lot. */
+    char *name;        /**< The name of the parking lot. */
+    CarList carList;   /**< The list of cars in the parking lot. */
+    MovList movList;   /**< The list of movements in the parking lot. */
 } Park;
 
-typedef struct sys
-{
-    char *buffer;
-    Park **parkPtrArray;
-    int createdParks;
-    Date *currentDate;
+/**
+ * @brief Represents the system.
+ */
+typedef struct sys {
+    char *buffer;          /**< The buffer used for input/output. */
+    Park **parkPtrArray;   /**< Array of pointers to parking lots. */
+    int createdParks;      /**< The number of created parking lots. */
+    Date *currentDate;     /**< Pointer to the current date. */
 } Sys;
+
 
 /*Function Declarations*/
 Sys sysCreator(char *buf, Park **parksPtr, int createdParks, Date *date);
