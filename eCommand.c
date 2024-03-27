@@ -8,64 +8,78 @@ void eCommand(Sys *system){
     int day, month, year, hour, min;
     char matricula[9], nome[MAX_BUFSIZ];
 
+    /* Parse input to extract vehicle information */
     if((sscanf(system->buffer, "e \"%[^\"]\" %s %d-%d-%d %d:%d", 
     nome, matricula, &day, &month, &year, &hour, &min) == 7) ||
     sscanf(system->buffer, "e %s %s %d-%d-%d %d:%d", 
     nome, matricula, &day, &month, &year, &hour, &min) == 7){
         Date entry = { year, month, day, hour, min};
+        
+        /* Check for errors in the entrance operation */
         int parkPos = eErrors(system, nome, matricula, &entry);
-
         if (parkPos != ERROR) {
             Park *park = system->parkPtrArray[parkPos];
-            AddMovtoList(park, 'e', matricula, &entry); // Adiciona um movimento de entrada
-            AddCar(park, park->movList.tail); // Associa o carro ao último movimento de entrada
+            
+            /* Add an entrance movement to the park's movement list */
+            AddMovtoList(park, 'e', matricula, &entry); 
+            /* Add a new car to the park's car list */
+            AddCar(park, park->movList.tail); 
+            /* Update the system's current date */
             updateDate(system, &entry); 
+            
+            /* Print the name of the park and the number of empty spaces */
             printf("%s %d\n", park->name, park->emptySpaces);
         }
     }
-    else{return;}
+    return;
 }
 
-void AddMovtoList(Park *park, char identifier, char *license, Date *entryDate) {
-    Mov *newMov = malloc(sizeof(Mov)); // Aloca memória para o novo movimento
-    if (newMov == NULL) {
-        printf("Allocation Error.\n");
-        exit(0);
-    }
+void AddMovtoList(Park *park, char identifier, char *license, Date *entryDate){
+    /* Allocate memory for the new movement */
+    Mov *newMov = malloc(sizeof(Mov));
+    if (newMov == NULL) exit(0);
+
+    /* Initialize the new movement with provided information */
     newMov->identifier = identifier;
     newMov->payment = ZERO;
     strcpy(newMov->license, license);
     newMov->movDate = *entryDate;
     newMov->next = NULL;
 
-    // Verifica se a lista de movimentos está vazia
-    if (park->movList.head == NULL) {
+    /* empty movement list */
+    if(park->movList.head == NULL){
         park->movList.head = newMov;
         park->movList.tail = newMov;
-    } else {
+    } 
+    /* Add the new movement to the end of the existing movement list */
+    else{
         park->movList.tail->next = newMov;
         park->movList.tail = newMov;
     }
 }
 
 void AddCar(Park *park, Mov *carEntry) {
-    Car *newCar = malloc(sizeof(Car)); // Aloca memória para o novo carro
-    if (newCar == NULL) {
-        printf("Allocation Error.\n");
-        exit(1);
-    }
+    /* Allocate memory for the new car */
+    Car *newCar = malloc(sizeof(Car));
+    if(newCar == NULL) exit(1);
 
+    /* Set the car entry information */
     newCar->carEntry = carEntry;
     newCar->next = NULL;
 
-    // Verifica se a lista de carros está vazia
-    if (park->carList.head == NULL) {
+    /* empty car list */
+    if(park->carList.head == NULL) {
         park->carList.head = newCar;
         park->carList.tail = newCar;
-    } else {
+    }
+
+    /* Add the new car to the end of the existing car list */
+    else{
         park->carList.tail->next = newCar;
         park->carList.tail = newCar;
     }
+
+    /* Decrement empty spaces number */
     park->emptySpaces--;
 }
 
@@ -79,39 +93,42 @@ void updateDate(Sys *system, Date *entry) {
 
 int findParkByName(Sys *system , char *inputName){
     int iter = ZERO;
+
+    /* Loop through the array to check if the names match */
     while(iter < system->createdParks){
-        if(strcmp(system->parkPtrArray[iter]->name, inputName) == ZERO)
+        if(strcmp(system->parkPtrArray[iter]->name, inputName) == ZERO) 
             return iter;
         else{
             iter++;
         }
     }
+
     return ERROR;
 }
 
-int eErrors(Sys *system, char *inputName, char *matricula, Date *date){
-    /* invalid park name */
+int eErrors(Sys *system, char *inputName, char *license, Date *date){
+    /* Check if the specified parking exists */
     int parkPosition = findParkByName(system, inputName);
     if(parkPosition == ERROR){
         printf("%s: no such parking.\n", inputName);
         return ERROR;
     }
-    /* parking is full */
+    /* Check if the parking is full */
     else if(system->parkPtrArray[parkPosition]->emptySpaces == ZERO){
         printf("%s: parking is full.\n", inputName);
         return ERROR;
     }
-    /* Invalid licence plate */
-    else if(validLicensePlate(matricula) == ERROR){
-        printf("%s: invalid licence plate.\n", matricula); 
+    /* Validate the license plate */
+    else if(validLicensePlate(license) == ERROR){
+        printf("%s: invalid licence plate.\n", license); 
         return ERROR;
     }
-    /* Caso onde veiculo está dentro de um parque */
-    else if(searchMatricula(system, matricula) == ERROR){
-        printf("%s: invalid vehicle entry.\n", matricula);
+    /* Check if the vehicle is already inside the parking */
+    else if(searchMatricula(system, license) == ERROR){
+        printf("%s: invalid vehicle entry.\n", license);
         return ERROR;
     }
-    /* invalid date */
+    /* Validate the date */
     else if (isValidDate(date) == ERROR || isEarlier(system, date) == ERROR){
         printf("invalid date.\n");
         return ERROR;
@@ -122,31 +139,34 @@ int eErrors(Sys *system, char *inputName, char *matricula, Date *date){
 }
 
 int validLicensePlate(char *license) {
-    int charPairCounter = 0;
-    int numberPairCounter = 0;
+    int charPairCounter = 0, numberPairCounter = 0;
     int hyphen1Pos = 2, hyphen2Pos = 5;
-
-    if (strlen(license) != 8) return ERROR;
+    int licenseLen = 8;
+    /* correct length? */
+    if (strlen(license) != licenseLen) return ERROR;
+    
+    /* hyphens in the correct positions? */
     if (license[hyphen1Pos] != '-' || license[hyphen2Pos] != '-') return ERROR;
 
-    for (int iter = 0; iter < 8; iter += 3) {
-        int j = iter;
-        if (isupper(license[j])) {
-            if (!isupper(license[j + 1])) return ERROR;
+    /* Iterate over the license plate */
+    for (int iter = ZERO; iter < licenseLen; iter += (hyphen1Pos + 1)){
+        int pairIter = iter;
+        if (isupper(license[pairIter])){
+            if (!isupper(license[pairIter + 1])) return ERROR;
             charPairCounter++;
-        } else if (isdigit(license[j])) {
-            if (!isdigit(license[j + 1])) return ERROR;
+        } 
+        else if (isdigit(license[pairIter])){
+            if (!isdigit(license[pairIter + 1])) return ERROR;
             numberPairCounter++;
-        } else {
-            return ERROR;
         }
+        return ERROR;
     }
 
-    if ((numberPairCounter == 1 && charPairCounter == 2) ||
-        (numberPairCounter == 2 && charPairCounter == 1)) {
+    /* correct number of character and number pairs? */
+    if((numberPairCounter == 1 && charPairCounter == 2) ||
+        (numberPairCounter == 2 && charPairCounter == 1)){
         return SUCCESS;
     }
-
     return ERROR;
 }
 
