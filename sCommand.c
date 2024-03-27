@@ -16,7 +16,6 @@ void sCommand(Sys *system){
         int parkPos = findParkByName(system, name);
         Car *carToRemove = sErrors(system, parkPos, name, license, &exitDate);
         if(carToRemove == NULL) return;
-        
         /* Removing car from the park */
         Mov *associatedEntrie = removeCar(system, parkPos, carToRemove);
         Date entryDate = associatedEntrie->movDate;

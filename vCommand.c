@@ -27,15 +27,14 @@ void printCarMovByPlate(Sys *system, Park **parkPtrArray, char *license){
         int entriesCounter = ZERO, exitsCounter = ZERO;
         while(currentMov != NULL){ /* Iterate through the movement list */
             if(strcmp(currentMov->license, license) == ZERO){
-                if (currentMov->identifier == 'e') { /* entry movements */
+                if(currentMov->identifier == 'e'){ /* entry movements */
                     printf("%s %02d-%02d-%02d %02d:%02d", 
                     parkPtrArray[iter]->name, currentMov->movDate.day, 
                     currentMov->movDate.month, currentMov->movDate.year, 
                     currentMov->movDate.hour, currentMov->movDate.minute);
-                    entriesCounter++;
-                    totalEntriesCounter++;
+                    entriesCounter++ ,totalEntriesCounter++;
                 } 
-                else if (currentMov->identifier == 's'){ /* exit movements */
+                else if(currentMov->identifier == 's'){ /* exit movements */
                     printf(" %02d-%02d-%02d %02d:%02d\n", 
                     currentMov->movDate.day, currentMov->movDate.month, 
                     currentMov->movDate.year, currentMov->movDate.hour, 
@@ -45,9 +44,9 @@ void printCarMovByPlate(Sys *system, Park **parkPtrArray, char *license){
             }
             currentMov = currentMov->next;
         } /* If the number of entries does not match the number of exits */
-        if(entriesCounter != exitsCounter){printf("\n");}
+        if(entriesCounter != exitsCounter) printf("\n");
     }
-    if (totalEntriesCounter == ZERO) {
+    if(totalEntriesCounter == ZERO){
         printf("%s: no entries found in any parking.\n", license);
     }
 }
