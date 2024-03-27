@@ -1,9 +1,23 @@
+/**
+ * @file Command.c
+ * @brief Implementation file for command C related functions.
+ * @author Diogo Fernandes - ist1110306
+ */
+
 #include "myheader.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 
+/**
+ * @brief Handles the 'p' command.
+ * 
+ * Parses the input buffer to extract park information and adds a new park to 
+ * the system or displays information about existing parks.
+ * 
+ * @param system Pointer to the system struct.
+ */
 void pCommand(Sys *system){
 	int capacity;
 	float TaxX, TaxY, TaxZ;
@@ -25,6 +39,19 @@ void pCommand(Sys *system){
     }
 }
 
+/**
+ * @brief Adds a new park to the system.
+ * 
+ * Creates a new park with the provided parameters and adds it to the 
+ * system's park list.
+ * 
+ * @param sys Pointer to the system struct.
+ * @param Name Name of the park.
+ * @param Max Maximum capacity of the park.
+ * @param TaxX Cost parameter for X.
+ * @param TaxY Cost parameter for Y.
+ * @param TaxZ Cost parameter for Z.
+ */
 void addPark(Sys *sys, char *Name, int Max, float TaxX, float TaxY, float TaxZ){
     /* Check for errors in park creation */
     if (pErrors(sys, Name, Max, TaxX, TaxY, TaxZ) == ERROR) return;
@@ -56,7 +83,13 @@ void addPark(Sys *sys, char *Name, int Max, float TaxX, float TaxY, float TaxZ){
     sys->parkPtrArray[sys->createdParks++] = newPark;
 }
 
-
+/**
+ * @brief Displays information about all parks in the system.
+ * 
+ * Iterates through each park in the system and prints its name, maximum capacity, and empty spaces.
+ * 
+ * @param system Pointer to the system struct.
+ */
 void parkInformation(Sys *system){
     int parkIndex;
     /* Iterate over each park in the system */
@@ -67,6 +100,20 @@ void parkInformation(Sys *system){
     }
 }
 
+/**
+ * @brief Checks for errors in park creation.
+ * 
+ * Checks for errors such as duplicate park names, invalid capacity, 
+ * invalid tax values and if the MAX_PARKS value is reached.
+ * 
+ * @param system Pointer to the system struct.
+ * @param Name Name of the park.
+ * @param capacity Capacity of the park.
+ * @param x Cost parameter for the first 15 minutes of parking.
+ * @param y Cost parameter for each additional 15 minutes after the first hour.
+ * @param z Maximum daily cost (24 hours).
+ * @return Returns ERROR if any errors are found, otherwise returns ZERO.
+ */
 int pErrors(Sys *system, char *Name, int capacity, float x, float y, float z){
     int parkIndex;
     /* Check if the park name already exists */

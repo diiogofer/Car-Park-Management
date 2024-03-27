@@ -92,13 +92,13 @@ typedef struct sys {
 
 /*Function Declarations*/
 
-/* SYSTEM RELATED FUNCTIONS */
+/* SYSTEM RELATED FUNCTIONS - system.c */
 Sys sysCreator(char *buf, Park **parksPtr, int createdParks, Date *date);
 void updateDate(Sys *system, Date *newDate);
 void freeAllParks(Sys *system);
 void freePark(Sys *system, int ParkPos);
 
-/* COMMAND P RELATED FUNCTIONS */
+/* COMMAND P RELATED FUNCTIONS - pCommand.c */
 void pCommand(Sys *system);
 void addPark(Sys *system, char *Name, int Max, float x, float y, float z);
 void parkInformation(Sys *system);

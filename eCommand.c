@@ -1,9 +1,19 @@
+/**
+ * @file eCommand.c
+ * @brief Contains implementations of functions related to the 'e' command.
+ * @author Diogo Fernandes - ist1110306
+*/
+
 #include "myheader.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 
+/**
+ * Processes the entrance command.
+ * @param system Pointer to the system struct.
+ */
 void eCommand(Sys *system){
     int day, month, year, hour, min;
     char matricula[9], nome[MAX_BUFSIZ];
@@ -34,6 +44,14 @@ void eCommand(Sys *system){
     return;
 }
 
+/** 
+ * @brief Adds a new movement to the movement list of a park.
+ * 
+ * @param park Pointer to the park structure.
+ * @param identifier Character indicating the type of movement ('e' for entrance, 's' for exit).
+ * @param license Pointer to a string containing the license plate.
+ * @param entryDate Pointer to the date structure representing the entry date and time.
+ */
 void AddMovtoList(Park *park, char identifier, char *license, Date *entryDate){
     /* Allocate memory for the new movement */
     Mov *newMov = malloc(sizeof(Mov));
@@ -58,6 +76,12 @@ void AddMovtoList(Park *park, char identifier, char *license, Date *entryDate){
     }
 }
 
+/** 
+ * @brief Adds a new car to the car list of a park.
+ * 
+ * @param park Pointer to the park structure.
+ * @param carEntry Pointer to the movement representing the car's entry.
+ */
 void AddCar(Park *park, Mov *carEntry) {
     /* Allocate memory for the new car */
     Car *newCar = malloc(sizeof(Car));
@@ -83,7 +107,17 @@ void AddCar(Park *park, Mov *carEntry) {
     park->emptySpaces--;
 }
 
-
+/**
+ * @brief Finds a park by its name in the system.
+ * 
+ * This function searches for a park with a specific name within 
+ * the system's array of parks.
+ * 
+ * @param system Pointer to the system structure.
+ * @param inputName Pointer to the name of the park to be found.
+ * @return The index of the park in the system's array if found, or ERROR if 
+ * not found.
+ */
 int findParkByName(Sys *system , char *inputName){
     int iter = ZERO;
 
@@ -98,6 +132,18 @@ int findParkByName(Sys *system , char *inputName){
     return ERROR;
 }
 
+/**
+ * @brief Checks for errors in the entrance operation.
+ * 
+ * This function verifies if there are any errors in the entrance operation,
+ * such as parking availability, license plate validity, and date correctness.
+ * 
+ * @param system Pointer to the system structure.
+ * @param inputName Pointer to the park's name.
+ * @param license Pointer to the vehicle's license plate.
+ * @param date Pointer to the date of entrance.
+ * @return The index of the park in the system if successful, or ERROR if any error occurs.
+ */
 int eErrors(Sys *system, char *inputName, char *license, Date *date){
     /* Check if the specified parking exists */
     int parkPosition = findParkByName(system, inputName);
@@ -130,6 +176,16 @@ int eErrors(Sys *system, char *inputName, char *license, Date *date){
     }
 }
 
+/**
+ * @brief Validates a vehicle's license plate format.
+ * 
+ * Checks if the license plate follows the correct format:
+ * three pairs of letters separated by hyphens, followed by
+ * three pairs of numbers.
+ * 
+ * @param license Pointer to the license plate string.
+ * @return SUCCESS if valid, ERROR otherwise.
+ */
 int validLicensePlate(char *license){
     int iter;
     int charPairCounter = ZERO, numberPairCounter = ZERO;
@@ -157,7 +213,13 @@ int validLicensePlate(char *license){
     return ERROR;
 }
 
-
+/**
+ * @brief Searches for a vehicle with a given license plate in the parking system.
+ * 
+ * @param system Pointer to the parking system.
+ * @param matricula Pointer to the license plate string to search for.
+ * @return SUCCESS if the license plate is not found, ERROR if found.
+ */
 int searchMatricula(Sys *system, char *matricula){
     for (int iter = 0; iter < system->createdParks; iter++){
         Car *currentCar = system->parkPtrArray[iter]->carList.head;
@@ -171,36 +233,4 @@ int searchMatricula(Sys *system, char *matricula){
     return SUCCESS;
 }
 
-
-int isValidDate(Date *date){
-    /* Static vector with month days */
-    int monthDays[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    int validDate = 1;
-    if (date->year < 0 || date->year > 9999) validDate = -1;
-    if (date->month < 1 || date->month > 12) validDate = -1;
-    if (date->day < 1 || date->day > monthDays[(date->month)-1]) validDate = -1;
-    if (date->hour < 0 || date->hour > 23) validDate = -1;
-    if (date->minute < 0 || date->minute > 59) validDate = -1;
-    return validDate;
-}
-
-int isEarlier(Sys *system, Date *date2) {
-
-    if (system->currentDate->year < date2->year) return SUCCESS;
-    else if (system->currentDate->year > date2->year) return ERROR;
-
-    if (system->currentDate->month < date2->month) return SUCCESS;
-    else if (system->currentDate->month > date2->month) return ERROR;
-
-    else if (system->currentDate->day < date2->day) return SUCCESS;
-    if (system->currentDate->day > date2->day) return ERROR;
-
-    if (system->currentDate->hour < date2->hour) return SUCCESS;
-    else if (system->currentDate->hour > date2->hour) return ERROR;
-
-    if (system->currentDate->minute < date2->minute) return SUCCESS;
-    else if (system->currentDate->minute > date2->minute) return ERROR;
-    
-    return SUCCESS;
-}
 
