@@ -112,63 +112,6 @@ Mov *removeCar(Sys *system, int parkPosition, Car *carToRemove) {
     return NULL;
 }
 
-int yearToMinutes(int *DaysMonthVec){
-    int iter, minutes = ZERO;
-    for(iter = ZERO; iter < 12; iter++){
-        minutes += DaysMonthVec[iter] * DAYTOMIN;
-    }
-    return minutes;
-}
-
-int traverseYears(int ComparisonYear, Date *date, int *DaysMonthVec){
-    int minutes = ZERO;
-    if(ComparisonYear == date->year) return minutes;
-
-    for(;ComparisonYear < date->year; ComparisonYear++){
-        /* Accumulate minutes for each year */
-        minutes += yearToMinutes(DaysMonthVec);
-    }
-
-    return minutes;
-}
-
-int traverseMonths(Date *date, int *DaysMonthVec){
-    int iter, minutes = ZERO;
-    
-    for(iter = ZERO; iter < date->month - 1; iter++){
-        /* Accumulate minutes for each month */
-        minutes += DaysMonthVec[iter] * DAYTOMIN;
-    }
-    
-    return minutes;
-}
-
-int timeInMinutesFunc(Date *date, int ComparisonYear, int *DaysMonthVec){
-    int timeInMinutes = ZERO;
-    /* Convert years to minutes */
-    timeInMinutes = traverseYears(ComparisonYear, date, DaysMonthVec);
-    /* Add hours and minutes */
-    timeInMinutes += date->hour * HOURTOMIN + date->minute;
-    /* Add days */
-    timeInMinutes += (date->day - 1) * DAYTOMIN;
-    /* Convert months to minutes */
-    timeInMinutes += traverseMonths(date, DaysMonthVec);
-    return timeInMinutes;
-}
-
-int datesDiff(Date *date1, Date *date2){
-    int timeInMinutes1, timeInMinutes2;
-    /* Array of days in each month */
-    int DaysMonthVec[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    /* Set the comparison year as the year before the first date */
-    int ComparisonYear = date1->year - 1;
-    /* Convert dates to minutes */
-    timeInMinutes1 = timeInMinutesFunc(date1, ComparisonYear, DaysMonthVec);
-    timeInMinutes2 = timeInMinutesFunc(date2, ComparisonYear, DaysMonthVec);
-    /* Return the difference in minutes */
-    return timeInMinutes2 - timeInMinutes1;
-}
-
 float payment(Sys *system, int parkPos, Date *entrie, Date *exit){
     float TaxX = system->parkPtrArray[parkPos]->X;
     float TaxY = system->parkPtrArray[parkPos]->Y;
