@@ -44,9 +44,9 @@ int main(){
             case 'f': fCommand(&system); break;
             case 'r': rCommand(&system); break;     
         }
-    /* Freeing allocated memory for parks */
         memset(buff, '\0', MAX_BUFSIZ);
 	}
+    /* Freeing allocated memory for parks */
     freeAllParks(&system);
     return 0;
 }
