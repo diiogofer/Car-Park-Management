@@ -138,36 +138,28 @@ int eErrors(Sys *system, char *inputName, char *license, Date *date){
     }
 }
 
-int validLicensePlate(char *matricula){
-    int i;
-    int charPairCounter = ZERO;
-    int numberPairCounter = ZERO;
+int validLicensePlate(char *license){
+    int iter;
+    int charPairCounter = ZERO, numberPairCounter = ZERO;
     int hyphen1Pos = 2, hyphen2Pos = 5; 
-    if(strlen(matricula) != 8){return ERROR;}
-    if(matricula[hyphen1Pos] != '-' || matricula[hyphen2Pos] != '-'){
-        return ERROR;
-    }
-    for(i = ZERO; i <= hyphen2Pos+1; i+=(hyphen1Pos+1)){
-        int j = i;
-        if(isupper(matricula[j])){
-            if(isupper(matricula[j+1]))
-                charPairCounter++;
-            else{ return ERROR;}
-        }
-        else if(isdigit(matricula[j])){
-            if(isdigit(matricula[j+1])){
+    /* Check the length and if the hyphens are in the correct positions */
+    if(strlen(license) != LICENSELEN) return ERROR;
+    if(license[hyphen1Pos] != '-' || license[hyphen2Pos] != '-') return ERROR;
+    /* Iterate over the pairs of characters in the license plate */
+    for(iter = ZERO; iter <= hyphen2Pos+1; iter += (hyphen1Pos + 1)){
+        int pairIter = iter;
+        if(isupper(license[pairIter]) && isupper(license[pairIter+1]))
+            charPairCounter++;
+        else if(isdigit(license[pairIter]) && isdigit(license[pairIter + 1]))
                 numberPairCounter++;
-            }
-            else{return ERROR;}
-        }
-        else{return ERROR;}
+        else {return ERROR;}
     }
-    /* correct number of character and number pairs? */
+    /* Check if the number of character and number pairs is correct */
     if((numberPairCounter == 1 && charPairCounter == 2) ||
         (numberPairCounter == 2 && charPairCounter == 1)){
         return SUCCESS;
     }
-    else{return ERROR;}
+    return ERROR;
 }
 
 

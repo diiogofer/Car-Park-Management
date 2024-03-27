@@ -7,6 +7,7 @@
 #define ZERO 0
 #define ERROR -1
 #define SUCCESS 1
+#define LICENSELEN 8
 
 /*Abstrações*/
 typedef char* Item;
