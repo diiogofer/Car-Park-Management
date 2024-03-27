@@ -11,45 +11,51 @@ void sCommand(Sys *system){
     name, license, &day, &month, &year, &hour, &min) == 7) || 
     (sscanf(system->buffer, "s %s %s %d-%d-%d %d:%d", 
     name, license, &day, &month, &year, &hour, &min) == 7)){
-
+        
         Date exitDate = {year, month, day, hour, min};
         int parkPos = findParkByName(system, name);
         Car *carToRemove = sErrors(system, parkPos, name, license, &exitDate);
-        if(carToRemove == NULL){return;}
+        if(carToRemove == NULL) return;
         
+        /* Removing car from the park */
         Mov *associatedEntrie = removeCar(system, parkPos, carToRemove);
         Date entryDate = associatedEntrie->movDate;
         Park *park= system->parkPtrArray[parkPos]; 
-        float paymentValue = ZERO;
         AddMovtoList(park, 's', license, &exitDate);
-        paymentValue = payment(system, parkPos, &entryDate, &exitDate);
-        park->movList.tail->payment = paymentValue;
+        /* Calculating the payment */
+        float fee = payment(system, parkPos, &entryDate, &exitDate);
+        park->movList.tail->payment = fee;
+        
         printf("%s %02d-%02d-%02d %02d:%02d %02d-%02d-%02d %02d:%02d %.2f\n",
         license, entryDate.day, entryDate.month, entryDate.year, 
-        entryDate.hour, entryDate.minute, day, month, year, hour, min, 
-        paymentValue);
+        entryDate.hour, entryDate.minute, day, month, year, hour, min, fee);
+        /* Updates */ 
         (park->emptySpaces)++;
         updateDate(system, &exitDate);
     }
-    else{return;}
+    return ;
 }
 
 
 
 Car *findCarInPark(Park *park, char *license) {
     Car *currentCar = park->carList.head;
+    
+    /* Loop through the car list until the end is reached */
     while (currentCar != NULL) {
+        /* Check if the license plate matches */
         if (strcmp(currentCar->carEntry->license, license) == 0) {
-            return currentCar; // Retorna o ponteiro para o carro encontrado
+            /* Return the pointer to the found car */
+            return currentCar;
         }
         currentCar = currentCar->next;
     }
-    return NULL; // Retorna NULL se o carro não for encontrado no parque
+
+    /* Return NULL if the car is not found in the park */
+    return NULL; 
 }
 
-
-// Função para verificar se há erros durante a saída do veículo
-Car *sErrors(Sys *system, int ParkPos, char *name, char *license, Date *exit) {
+Car *sErrors(Sys *system, int ParkPos, char *name, char *license, Date *exit){
     Park *park = system->parkPtrArray[ParkPos];
     /* Invalid park name */
     if (ParkPos == ERROR) {
@@ -68,7 +74,7 @@ Car *sErrors(Sys *system, int ParkPos, char *name, char *license, Date *exit) {
         return NULL;
     }
     /* Invalid date */
-    if (isValidDate(exit) != SUCCESS || isEarlier(system, exit) != SUCCESS) {
+    if (isValidDate(exit) != SUCCESS || isEarlier(system, exit) != SUCCESS){
         printf("invalid date.\n");
         return NULL;
     }
@@ -79,35 +85,33 @@ Car *sErrors(Sys *system, int ParkPos, char *name, char *license, Date *exit) {
 Mov *removeCar(Sys *system, int parkPosition, Car *carToRemove) {
     Park *park = system->parkPtrArray[parkPosition];
     Mov *associatedEntry = NULL;
+    /* If the car list is empty, return NULL */
     if (park->carList.head == NULL) return NULL;
 
-    // Se o carro a ser removido for o primeiro da lista
+    /* If the car to be removed is the first in the list */
     if (park->carList.head == carToRemove) {
         associatedEntry = carToRemove->carEntry;
         park->carList.head = carToRemove->next;
-        free(carToRemove); // Libera a memória do carro removido
+        free(carToRemove); /* Free the memory of the removed car */
         return associatedEntry;
     }
-    // Caso contrário, procura o carro na lista
+    /* Otherwise, search for the car in the list */
     Car *currentCar = park->carList.head;
-    while (currentCar->next != NULL) {
-        if (currentCar->next == carToRemove) {
+    while (currentCar->next != NULL){
+        if (currentCar->next == carToRemove){
             associatedEntry = carToRemove->carEntry;
             currentCar->next = carToRemove->next;
-            if (carToRemove == park->carList.tail) {
+            /* Update the tail if the removed car was the last in the list */
+            if (carToRemove == park->carList.tail){
                 park->carList.tail = currentCar;
             }
-            free(carToRemove); // Libera a memória do carro removido
+            free(carToRemove); /* Free the memory of the removed car */
             return associatedEntry;
         }
         currentCar = currentCar->next;
     }
     return NULL;
 }
-
-
-
-
 
 int yearToMinutes(int *DaysMonthVec){
     int iter, minutes = ZERO;
@@ -193,5 +197,5 @@ float payment(Sys *system, int parkPos, Date *entrie, Date *exit){
     }
     else{totalPayment += expected15Payment;}
     totalPayment += TaxZ * days;
-return totalPayment;
+    return totalPayment;
 }
