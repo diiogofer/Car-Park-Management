@@ -4,40 +4,42 @@
 #include <ctype.h>
 #include <string.h>
 
-// Função de ordenação por inserção para strings
-void insertion(Park *a[], int l, int r) {
-    int i, j;
-    for (i = l + 1; i <= r; i++) {
-        Park *v = a[i];
-        j = i - 1;
-        while (j >= l && strcmp(v->name, a[j]->name) < 0) {
-            a[j + 1] = a[j];
-            j--;
+void insertion(Park *array[], int left, int right) {
+    int currentI, prevI;
+    /* Iterate through the array */
+    for (currentI = left + 1; currentI <= right; currentI++){
+        /* Store the current element */
+        Park *current = array[currentI];
+        prevI = currentI - 1;
+        /* Shift elements if necessary */
+        while (prevI >= left && strcmp(current->name, array[prevI]->name) < 0){
+            array[prevI + 1] = array[prevI];
+            prevI--;
         }
-        a[j + 1] = v;
+        /* Insert the current element into its correct position */
+        array[prevI + 1] = current;
     }
 }
-void printCarMovByPlate(Sys *system, Park **parkPtrArray, char *matricula) {
-    int totalEntriesCounter = 0;
-    for (int iter = 0; iter < system->createdParks; iter++) {
+void printCarMovByPlate(Sys *system, Park **parkPtrArray, char *license){
+    int totalEntriesCounter = ZERO;
+    for (int iter = ZERO; iter < system->createdParks; iter++){
         Mov *currentMov = parkPtrArray[iter]->movList.head;
-        int entriesCounter = 0, exitsCounter = 0;
-        while (currentMov != NULL) {
-            if (strcmp(currentMov->license, matricula) == 0) {
+        int entriesCounter = ZERO, exitsCounter = ZERO;
+        while(currentMov != NULL){
+            if(strcmp(currentMov->license, license) == ZERO) {
                 if (currentMov->identifier == 'e') {
-                    printf("%s ", parkPtrArray[iter]->name);
-                    printf("%02d-%02d-%02d %02d:%02d", 
-                           currentMov->movDate.day, currentMov->movDate.month,
-                           currentMov->movDate.year, currentMov->movDate.hour,
-                           currentMov->movDate.minute);
+                    printf("%s %02d-%02d-%02d %02d:%02d", 
+                    parkPtrArray[iter]->name, currentMov->movDate.day, 
+                    currentMov->movDate.month, currentMov->movDate.year, 
+                    currentMov->movDate.hour, currentMov->movDate.minute);
                     entriesCounter++;
                     totalEntriesCounter++;
                 } 
                 else if (currentMov->identifier == 's') {
                     printf(" %02d-%02d-%02d %02d:%02d\n", 
-                           currentMov->movDate.day, currentMov->movDate.month, 
-                           currentMov->movDate.year, currentMov->movDate.hour, 
-                           currentMov->movDate.minute);
+                    currentMov->movDate.day, currentMov->movDate.month, 
+                    currentMov->movDate.year, currentMov->movDate.hour, 
+                    currentMov->movDate.minute);
                     exitsCounter++;
                 }
             }
@@ -45,26 +47,27 @@ void printCarMovByPlate(Sys *system, Park **parkPtrArray, char *matricula) {
         }
         if(entriesCounter != exitsCounter){printf("\n");}
     }
-    if (totalEntriesCounter == 0) {
-        printf("%s: no entries found in any parking.\n", matricula);
+    if (totalEntriesCounter == ZERO) {
+        printf("%s: no entries found in any parking.\n", license);
     }
 }
 
 void vCommand(Sys *system) {
     char matricula[9];
     
-    // Lê a matrícula do buffer
+    /* Read the license plate from the buffer */
     if (sscanf(system->buffer, "v %s", matricula) == 1 &&
         validLicensePlate(matricula) != ERROR){
-        // Cria uma cópia ordenada dos ponteiros do vetor original
+        /* Create a sorted copy of the park pointer array */
         Park *tempParkPtrArray[system->createdParks];
         for (int i = 0; i < system->createdParks; i++) {
             tempParkPtrArray[i] = system->parkPtrArray[i];
         }
         insertion(tempParkPtrArray, ZERO, system->createdParks - 1);
 
-        // Imprime os movimentos do carro por ordem alfabética dos parques
+        /* Print the movements of the car sorted alphabetically by park names */
         printCarMovByPlate(system, tempParkPtrArray, matricula);
     }
+    /* Invalid license plate, print error message */
     else{printf("%s: invalid licence plate.\n", matricula);}
 }

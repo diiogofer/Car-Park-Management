@@ -4,12 +4,6 @@
 #include <ctype.h>
 #include <string.h>
 
-Sys sysCreator(char *buffer, Park **parksPtr, int numParks, Date *actualDate){
-    /* Initialize a system struct and return it*/
-    Sys system = {buffer, parksPtr, numParks, actualDate};
-    return system;
-}
-
 void pCommand(Sys *system){
 	int capacity;
 	float TaxX, TaxY, TaxZ;
