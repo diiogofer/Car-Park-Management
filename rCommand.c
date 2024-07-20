@@ -1,7 +1,7 @@
 /**
  * @file rCommand.c
- * @brief Implementation of functions related to the "r" command.
- * @author Diogo Fernandes - ist1110306
+ * @brief Implementation of functions related to the 'r' command.
+ * @author Diogo Fernandes (diiogofer - https://github.com/diiogofer)
  */
 
 #include "myheader.h"
