@@ -1,7 +1,7 @@
 /**
  * @file eCommand.c
  * @brief Contains implementations of functions related to the 'e' command.
- * @author Diogo Fernandes - ist1110306
+ * @author Diogo Fernandes (diiogofer - https://github.com/diiogofer)
 */
 
 #include "myheader.h"
