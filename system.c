@@ -1,7 +1,7 @@
 /**
  * @file system.c
  * @brief Implementation file for system-related functions.
- * @author Diogo Fernandes - ist1110306
+ * @author Diogo Fernandes (diiogofer - https://github.com/diiogofer)
  */
 
 #include "myheader.h"
