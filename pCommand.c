@@ -1,7 +1,7 @@
 /**
  * @file Command.c
- * @brief Implementation file for command C related functions.
- * @author Diogo Fernandes - ist1110306
+ * @brief Implementation file for command 'p' related functions.
+ * @author Diogo Fernandes (diiogofer - https://github.com/diiogofer)
  */
 
 #include "myheader.h"
