@@ -1,7 +1,7 @@
 /**
  * @file time.c
  * @brief Implementation of functions related to date and time management.
- * @author Diogo Fernandes - ist1110306
+ * @author Diogo Fernandes (diiogofer - https://github.com/diiogofer)
  */
 #include "myheader.h"
 #include <stdio.h>
