@@ -1,7 +1,7 @@
 /**
  * @file fCommand.c
  * @brief Implementation of functions related to the "f" command.
- * @author Diogo Fernandes - ist1110306
+ * @author Diogo Fernandes (diiogofer - https://github.com/diiogofer)
  */
 
 #include "myheader.h"
