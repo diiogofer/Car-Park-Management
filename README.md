@@ -3,11 +3,11 @@
 
 Developed a comprehensive software system for managing car parking lots, incorporating features such as automated entry/exit, real-time slot availability, and payment processing.
 
-The project brief is available in [enunciado.md](enunciado.md).
-This project resolution was awarded the highest score as it was considered an exemplary use of the techniques taught in the course.
+The project brief is available in [ProjectRules.md](ProjectRules.md).
+This project resolution was awarded the highest score as it was considered an exemplary use of the techniques taught in the course. </br>
 
 
-- **Important notes:**
+**Important notes:**
 
 - Compilation process using gcc (version 12.3.0):
 ```
