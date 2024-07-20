@@ -1,7 +1,7 @@
 /**
  * @file MYHEADER_H
  * @brief Header file containing data structures and function prototypes.
- * Author: Diogo Fernandes - ist1110306
+ * Author: Diogo Fernandes (diiogofer - https://github.com/diiogofer)
  */
 
 #ifndef MYHEADER_H
