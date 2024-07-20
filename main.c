@@ -1,7 +1,8 @@
 /**
  * @file main.c
  * @brief Contains the main function of the program.
- * @author Diogo Fernandes - ist1110306
+ * @author Diogo Fernandes (diiogofer - https://github.com/diiogofer)
+
  */
 
 #include "myheader.h"
