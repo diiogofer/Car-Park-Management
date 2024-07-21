@@ -100,24 +100,24 @@ r "CC Colombo"
 
 #### Error Messages and Explanations
 ##### General Errors:
- - "parking already exists." ->  if the parking name already exists.
- - invalid capacity. if the capacity is less than or equal to 0.
- - invalid cost. if one of the costs is less than or equal to 0 or if the tariff values are not increasing.
- - too many parks. if the number of parks created is at its limit.
+ - "parking already exists." if the parking name already exists.
+ - "invalid capacity." if the capacity is less than or equal to 0.
+ - "invalid cost." if one of the costs is less than or equal to 0 or if the tariff values are not increasing.
+ - "too many parks." if the number of parks created is at its limit.
 ##### Entry Errors:
- - no such parking. if the parking name does not exist.
- - parking is full. if the parking lot is full.
- - invalid licence plate. if the license plate is invalid.
- - invalid vehicle entry. if the car is already inside a parking lot.
- - invalid date. if the date or time is invalid or before the last recorded entry or exit.
+ - "no such parking." if the parking name does not exist.
+ - "parking is full." if the parking lot is full.
+ - "invalid licence plate." if the license plate is invalid.
+ - "invalid vehicle entry." if the car is already inside a parking lot.
+ - "invalid date." if the date or time is invalid or before the last recorded entry or exit.
 ##### Exit Errors:
- - no such parking. if the parking name does not exist.
- - invalid licence plate. if the license plate is invalid.
- - invalid vehicle exit. if the car is not inside the specified parking lot.
- - invalid date. if the date or time is invalid or before the last recorded entry or exit.
+ - "no such parking." if the parking name does not exist.
+ - "invalid licence plate." if the license plate is invalid.
+ - "invalid vehicle exit." if the car is not inside the specified parking lot.
+ - "invalid date." if the date or time is invalid or before the last recorded entry or exit.
 ##### Revenue Errors:
- - no such parking. if the parking name does not exist.
- - invalid date. if the date is invalid or after the last recorded entry or exit.
+ - "no such parking." if the parking name does not exist.
+ - "invalid date." if the date is invalid or after the last recorded entry or exit.
 ##### Accepted License Plate Format
 A vehicle's license plate must be in the following format: </br>
 - Three pairs of characters separated by a hyphen ('-').
