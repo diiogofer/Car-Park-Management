@@ -108,22 +108,25 @@ r "CC Colombo"
  - no such parking. if the parking name does not exist.
  - parking is full. if the parking lot is full.
  - invalid licence plate. if the license plate is invalid.
-invalid vehicle entry. if the car is already inside a parking lot.
-invalid date. if the date or time is invalid or before the last recorded entry or exit.
-Exit Errors:
+ - invalid vehicle entry. if the car is already inside a parking lot.
+ - invalid date. if the date or time is invalid or before the last recorded entry or exit.
+##### Exit Errors:
+ - no such parking. if the parking name does not exist.
+ - invalid licence plate. if the license plate is invalid.
+ - invalid vehicle exit. if the car is not inside the specified parking lot.
+ - invalid date. if the date or time is invalid or before the last recorded entry or exit.
+##### Revenue Errors:
+ - no such parking. if the parking name does not exist.
+ - invalid date. if the date is invalid or after the last recorded entry or exit.
+##### Accepted License Plate Format
+A vehicle's license plate must be in the following format: </br>
+- Three pairs of characters separated by a hyphen ('-').
+- Each pair can either contain uppercase letters (A-Z) or decimal digits (0-9).
+- A pair cannot contain both a letter and a digit.
+- A license plate must contain at least one pair of letters and at least one pair of digits.
+Example: AA-00-AA.
 
-no such parking. if the parking name does not exist.
-invalid licence plate. if the license plate is invalid.
-invalid vehicle exit. if the car is not inside the specified parking lot.
-invalid date. if the date or time is invalid or before the last recorded entry or exit.
-Revenue Errors:
-
-no such parking. if the parking name does not exist.
-invalid date. if the date is invalid or after the last recorded entry or exit.
-Accepted License Plate Format
-The system accepts license plates in the following format:
-3 letters followed by a hyphen and 4 digits (e.g., ABC-1234).
-
-
+#### Contributions
+Contributions are welcome! Feel free to open an issue or submit a pull request with improvements and fixes.
 
 
