@@ -14,7 +14,7 @@ This project resolution was awarded the highest score as it was considered an ex
 gcc -O3 -Wall -Wextra -Werror -Wno-unused-result -o proj1 *.c
 ```
 
-- After compiling your project, to run the public tests, you should unzip and enter the test directory:
+- After compiling the project, to run the public tests, you should unzip and enter the test directory:
 ```
 unzip public-tests.zip
 ```
